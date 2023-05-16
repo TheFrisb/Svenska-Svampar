@@ -39,7 +39,7 @@ def new_order_mail(order, pdf_path):
     message.attachment = attachedFile
 
     try:
-        sg = SendGridAPIClient('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')
+        sg = SendGridAPIClient('')
         response = sg.send(message)
         print(response.status_code)
         print(response.body)
@@ -73,7 +73,7 @@ def product_quantity_mail(product):
 
         )
     try:
-        sg = SendGridAPIClient('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')
+        sg = SendGridAPIClient('')
         response = sg.send(message)
         Product.objects.filter(id=product.id).update(mail_status=True)
         return True
@@ -102,7 +102,7 @@ def new_registerApplication_mail(application):
                     <a href="{link_url}" target="_blank" style="text-decoration: none;background: blue;font-weight: 600;padding: 5px 10px;border-radius: 4px;color: white;">Check application</a>'
     )
     try:
-        sg = SendGridAPIClient('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')
+        sg = SendGridAPIClient('')
         response = sg.send(message)
         Register_Application.objects.filter(id=application.id).update(is_mail_sent=True)
         return True
