@@ -1,0 +1,34 @@
+{% load static %}
+
+
+<nav class="navbar navbar-expand-lg bg-dark sticky-top" data-bs-theme="dark" co>
+    <div class="container-xxl ">
+        <a class="navbar-brand" href="#">
+            <img src="{% static 'shop/media/logo.png' %}" alt="Logo" width="80" height="57" class="d-inline-block align-text-middle">
+            Svedok Svampar
+          </a>
+    
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#shopmanager-navbarNav" aria-controls="shopmanager-navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="shopmanager-navbarNav">
+            <div class="navbar-nav">
+                {% if request.user.is_staff %}
+                    <a href="{% url 'shopmanager:shopmanager-home' %}" class="nav-link">Shopmanager</a>
+                    <a href="{% url 'shopmanager:shopmanager-home' %}#new_registrations" class="nav-link" style="position:relative">New Registrations<span style="position:relative;bottom:5px;left:2px;font-weight:600;" class="text-warning">{{ new_registrations_count }}</span></a>
+                    <a href="{% url 'shopmanager:shopmanager-view-orders' pk=0 %}" class="nav-link">View Orders</a>
+                {% endif %}
+                <a href="#" class="nav-link">About us</a>
+            </div>
+            <div class="navbar-nav">
+                {% if not user_profile %}    
+                    <p class="nav-link m-0 cursor-pointer">Ask to register</p>
+                    <p class="nav-link m-0 cursor-pointer" id="navLogin">Login</p>
+                {% else %}
+                    <a href="{% url 'logout' %}" class="nav-link">Logout</a>
+                {% endif %} 
+            </div>
+        </div> 
+        
+    </div>
+</nav>

@@ -1,0 +1,17 @@
+1.  Shopmanager
+    - Templating
+    - Styling
+    - Routing
+
+2. Shop page
+    - Templating
+    - Styling
+
+3. Order
+    - Pdf with email
+
+4. Js Functionality
+    - Cart
+    - Shop
+    - Shopmanager
+    

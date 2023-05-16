@@ -1,0 +1,135 @@
+from django.db import models
+from django.contrib.auth.models import User
+from django.urls import reverse
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFill
+from django.contrib.contenttypes.models import ContentType
+# Create your models here.
+
+
+
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    business_name = models.CharField(max_length=100, blank=True, unique=True)
+    organization_number = models.CharField(max_length=100, blank=True)
+    contact_person = models.CharField(max_length=100, blank=True)
+    phone_number = models.CharField(max_length=100, blank=True)
+    email = models.CharField(max_length=100, blank=True)
+    address = models.CharField(max_length=100, blank=True)
+    postal_code = models.CharField(max_length=100, blank=True)
+    city = models.CharField(max_length=100, blank=True)
+    user_class = models.ForeignKey('UserClass', on_delete=models.SET_NULL, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return str(self.business_name)
+    
+    def get_absolute_url(self):
+        return reverse('profile', kwargs={'pk': self.pk})
+
+    class Meta:
+        verbose_name_plural = 'Customers'
+        verbose_name = 'Customer'
+
+
+
+class Product(models.Model):
+    name = models.CharField(max_length = 100)
+    stock = models.IntegerField()
+    thumbnail = ProcessedImageField(upload_to='products/thumbnails/%Y/%m/%d/', processors=[ResizeToFill(550,550)], format='WEBP')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    mail_status = models.BooleanField(default=True)
+    sku = models.CharField(max_length=100, blank=True, null=True)
+    ean_code = models.CharField(max_length=100, blank=True, null=True)
+    def __str__(self):
+        return f'{self.name} - {self.stock} stock'
+    
+    class Meta:
+        verbose_name_plural = 'Products'
+        verbose_name = 'Product'
+
+    
+    @property
+    def get_admin_url(self):
+        content_type = ContentType.objects.get_for_model(self.__class__)
+        return reverse(f'admin:{content_type.app_label}_{content_type.model}_change', args=(self.id,))
+
+
+class UserClass(models.Model):
+    name = models.CharField(max_length=100)
+    products = models.ManyToManyField(Product, through='ProductPrice')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def get_admin_url(self):
+        content_type = ContentType.objects.get_for_model(self.__class__)
+        return reverse(f'admin:{content_type.app_label}_{content_type.model}_change', args=(self.id,))
+    
+    
+    class Meta:
+        verbose_name_plural = 'User Classes'
+        verbose_name = 'User Class'
+
+
+class ProductPrice(models.Model):
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    price = models.IntegerField()
+    user_class = models.ForeignKey(UserClass, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f'Price for {self.product.name} by class {self.user_class.name}'
+    
+    class Meta:
+        verbose_name_plural = 'Product Prices'
+        verbose_name = 'Product Price'
+
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    order_date = models.DateTimeField(auto_now_add=True)
+    total_price = models.IntegerField(null = True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    is_mail_sent = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'Order #{self.id} - {self.user.username}'
+
+    class Meta:
+        verbose_name_plural = 'Orders'
+        verbose_name = 'Order'
+
+    @property
+    def get_admin_url(self):
+        content_type = ContentType.objects.get_for_model(self.__class__)
+        return reverse(f'admin:{content_type.app_label}_{content_type.model}_change', args=(self.id,))
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    quantity = models.IntegerField()
+    price_each = models.IntegerField()
+    total_price = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        if self.product is not None:
+            return f'Order #{self.order.id} - {self.product.name}'
+        else:
+            return f'Order #{self.order.id} - Deleted Product'
+
+    class Meta:
+        verbose_name_plural = 'Order Items'
+        verbose_name = 'Order Item'

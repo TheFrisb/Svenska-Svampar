@@ -1,0 +1,186 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block content %}
+{% csrf_token %}
+<div class="container-xxl py-4">
+    <div class="alert alert-warning d-none" role="alert" id="alert"></div>
+    <div class="row">
+        <div class="col-12 py-4">
+            <button class="btn btn-success btn-lg" id="openCart">Open cart</button>
+        </div>
+        <div class="col-12 py-1">
+            <h5 id="response">asd</h5>
+        </div>
+    </div>
+    <div class="row g-4">
+        {% for product, price in product_prices.items %}
+        <div class="col-12 col-sm-6  col-md-4 col-lg-3 ">
+            <div class="card text-center h-100 grow productCard" style="box-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.25);">
+                <div class="p-2">
+                    <img src="{{ product.thumbnail.url }}" alt="" class="card-img-top card-productThumbnail">
+                </div>
+                
+                <div class="card-header fs-5 fw-bold text-dark card-productName">{{ product.name }}</div>
+                <div class="card-body">
+                    <div class="text-start text-success fw-semibold">
+                        <p class="card-text ">
+                            Arnr <span class="card-productSku">{{ product.sku }}</span>
+                            <br>
+                            EAN: {{ product.ean_code }}
+                            {% if request.user.is_staff %}
+                                <br>
+                                {% if product.stock < 50  and product.stock > 0 %}
+                                <span class="text-warning fw-bold">Stock: {{ product.stock }}</span>
+                                {% elif product.stock == 0 %}
+                                <span class="text-danger fw-bold">Stock: {{ product.stock }}</span>
+                                {% else %}
+                                Stock: {{ product.stock }}
+                                {% endif %}
+                            {% endif %}
+                            <br>
+                            Pris: <span class="card-pricePerUnit">123</span>
+                        </p>
+                    </div>
+                    {% if price.price %}
+                        
+                        <div class="card-text fw-semibold fs-5 text-danger pt-2">Price per unit <span class="card-productPrice">{{ price.price }}</span>$</div>
+                        {% if product.stock > 0 %}
+                            <div class="input-group my-3  rounded w-50 mx-auto quantityContainer">
+                                <button class="btn btn-sm w-25 btn-outline-success quantityBtn quantityMinus" type="button" >-</button>
+                                <input type="number" class="form-control text-center border border-solid border-success product_quantity" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" min="1" value="1">
+                                <button class="btn btn-sm w-25 btn-outline-success quantityBtn quantityPlus" type="button">+</button>
+                            </div>
+                                {% if user_profile %}
+                                    <button class="btn btn-success w-100 grow addToCartBtn" data-product-id="{{ product.id }}">Add to Cart</button>
+                                {% endif %}
+                        {% endif %}
+                    {% endif %}
+                    {% if not user_profile %}
+                            <button class="btn btn-success w-100 mt-3" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
+                            <button class="btn btn-dark w-100 mt-2">Ask to register</button>
+                        </div>
+                    {% else %}
+                        </div>
+                        {% if product.stock > 0 %}
+                            <div class="card-footer text-success fw-semibold border-0" style="background-color:rgba(var(33,37,41),var(1))!important">
+                                In stock
+                            </div>
+                            {% else %}
+                            <div class="card-footer bg-danger text-white fw-semibold border-0">
+                                Out of Stock
+                            </div>
+                            {% endif %}
+                    {% endif %}    
+                
+                
+                
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+  
+  <!-- Login modal -->
+{% if not user_profile %}
+    <div class="modal fade " id="loginModal" tabindex="-1" aria-labelledby="loginModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border border-2 border-primary">
+        
+            <div class="modal-body">
+                <div class="text-center" id="login_modal_append">
+                    <h3 class="text-primary">Login</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="position:absolute!important;right:1.5rem!important;top:1.5rem!important;"></button>
+                </div>
+                <div class="alert alert-danger alert-dismissible d-none" role="alert" id="wrongLoginInformation">
+                    <strong>Wrong credentials!</strong>
+                </div>
+
+                <div class="m-2">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" placeholder="Username" name="">
+                </div>
+                <div class="m-2">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="Username" name="password">
+                </div>
+                <div class="m-2 mt-4">
+                    <button class="btn btn-primary w-100" id="loginBtn">Login</button>
+                </div>
+
+            </div>
+        </div>
+        </div>
+    </div>
+{% else %}
+<!-- CartItem Template -->
+<div class="col-12 col-sm-6 col-lg-4 col-xl-3 cartItem d-none">
+    <div class="card grow" style="box-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.25);">
+        <img src="{{ product.thumbnail.url }}" alt="" class="card-img-top cartItemThumbnail">
+        <div class="card-body">
+            <h5 class="card-title cartItemName"></h5>
+            <div class="card-text text-secondary ">Arnr: <span class="cartItemSku"></span></div>
+            <div class="card-text">Pris: <span class="cartItemPrice-Each"></span></div>
+            <div class="card-text">Package price: <span class="cartItemPrice"></span>$</div>
+            <div class="input-group my-3  rounded w-75 mx-auto">
+                <button class="btn btn-sm w-25 btn-outline-success cartQuantityBtn quantityMinus" type="button" >-</button>
+                <input type="number" class="form-control text-center border border-solid border-success cartItemQuantity" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" min="1" value="1">
+                <button class="btn btn-sm w-25 btn-outline-success cartQuantityBtn quantityPlus" type="button">+</button>
+            </div>
+            <div class="card-text text-center fs-5 fw-semibold">Total: <span class="cartItemTotalPrice"></span>$</div>
+        </div>
+    </div>  
+</div>
+<!-- Cart Modal -->
+<div class="modal" id="cartModal" tabindex="-1" aria-labelledby="cartModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Your cart</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid p-0">
+                <div class="row g-4" id="cardModalBody">
+
+                </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <p>Total: <span id="cartTotal"></span>$</p>
+            <button type="button" class="btn btn-success" id="place_orderBtn">Purchase</button>
+          </div>
+        </div>
+      </div>
+</div>
+{% endif %}
+
+
+
+
+{% endblock content %}
+
+{% block scripts %}
+    <script src="{% static 'shop/js/shop.js' %}"></script>
+{% endblock scripts %}
+
+
+<!-- 
+{% for product, price in product_prices.items %}
+<div class="col-12 col-sm-6 col-lg-4 col-xl-3 product-card-holder">
+    <div class="card grow" style="box-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.25);">
+        <img src="{{ product.thumbnail.url }}" alt="" class="card-img-top">
+        <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <div class="card-text text-secondary">{{ product.sku }}</div>
+            <div class="card-text ">Pris: 13.34$</div>
+            <div class="card-text">Package price: {{ price.price }}</div>
+            <div class="input-group my-3  rounded w-75 mx-auto">
+                <button class="btn btn-sm w-25 btn-outline-success quantityBtn quantityMinus" type="button" >-</button>
+                <input type="number" class="form-control text-center border border-solid border-success product_quantity" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" min="1" value="1">
+                <button class="btn btn-sm w-25 btn-outline-success quantityBtn quantityPlus" type="button">+</button>
+            </div>
+            <div class="card-text text-center fs-5 fw-semibold">Total: {{ price.price }}$</div>
+        </div>
+    </div>  
+</div>
+{% endfor %} -->

@@ -1,0 +1,146 @@
+import logging
+from django.shortcuts import render
+from django.http import JsonResponse
+import json
+from shop.models import *
+from shopmanager.models import Register_Application
+from django.contrib.auth import authenticate, login
+
+# Create your views here.
+
+logger = logging.getLogger('shop')
+
+def shop_home(request):
+    if request.user.is_authenticated:
+        user_profile = UserProfile.objects.get(user=request.user)
+        user_class = user_profile.user_class
+        print(user_profile.business_name)
+        products = Product.objects.all()
+        product_prices = {}
+        for product in products:
+            try:
+                price = ProductPrice.objects.get(product=product, user_class=user_class)
+                product_prices[product] = price
+            except ProductPrice.DoesNotExist:
+                product_prices[product] = None
+
+        context = {
+            'user_profile': user_profile,
+            'product_prices': product_prices,
+        }
+        if request.user.is_staff:
+            context['new_registrations_count'] = Register_Application.objects.filter(is_dismissed=False).count()
+    else:
+        user_profile = None
+        products = Product.objects.all()
+        product_prices = {}
+        for product in products:
+            product_prices[product] = None
+        context = {
+            'user_profile': user_profile,
+            'product_prices': product_prices,
+        }
+
+    return render(request, 'shop/shop_home.html', context=context)
+
+
+def check_product_quantity(request):
+    if request.method == 'GET':
+        if request.user.is_authenticated:
+            product_id = int(request.GET.get('product_id'))
+            quantity = int(request.GET.get('quantity'))
+
+            try:
+                product = Product.objects.get(id=product_id)
+            except Product.DoesNotExist:
+                return JsonResponse({'error': 'Product does not exist.'}, status=400)
+            
+            if (quantity > product.stock):
+                return JsonResponse({'error': 'Not enough stock.'}, status=400)
+            else:
+                return JsonResponse({'message': 'Enough stock.'}, status=200)
+            
+        else:
+            return JsonResponse({'error': 'Not authenticated.'}, status=400)
+        
+    else:
+        return JsonResponse({'error': 'Wrong request method.'}, status=400)
+    
+
+def create_order(request):
+    if request.method == 'POST':
+        if request.user.is_authenticated:
+            user = request.user
+            user_profile = UserProfile.objects.get(user=user)
+            user_class = user_profile.user_class
+            cart_items = json.loads(request.POST.get('cartItems'))
+            if not cart_items:
+                return JsonResponse({'error': 'Cart is empty.'}, status=400)
+            print(cart_items)
+            insufficient_stock_items = []
+            order = Order.objects.create(user=user, user_profile = user_profile)
+            order_total = 0
+            for prod_id, quantity in cart_items.items():
+                product_id = int(prod_id)
+                quantity = int(quantity)
+
+                try:
+                    product = Product.objects.get(id=product_id)
+                except Product.DoesNotExist:
+                    return JsonResponse({'error': 'Product does not exist.'}, status=400)
+                
+                if quantity > product.stock:
+                    insufficient_stock_items.append(product_id)
+                    
+                else:
+                    product_price = ProductPrice.objects.filter(product=product, user_class=user_class).values_list('price', flat=True).get()
+                    order_total += product_price * quantity
+                    OrderItem.objects.create(order=order, product=product, quantity=quantity,
+                                              price_each = product_price, total_price = product_price * quantity)
+                    product.stock -= quantity
+                    product.save()
+            
+            if insufficient_stock_items:
+                order.delete()
+                return JsonResponse({
+                    'error': 'Not enough stock for some items',
+                    'insufficient_stock_items': insufficient_stock_items
+                    }, status=400)
+            else:
+                order.total_price = order_total
+                order.save()
+                return JsonResponse({'message': 'Order created.'}, status=200)
+                
+        else:
+            return JsonResponse({'error': 'Not authenticated.'}, status=400)
+        
+
+def shop_login(request):
+    if request.user.is_authenticated:
+        return render(request, 'shop/shop_home.html')
+    else:
+        return render(request, 'shop/login.html')
+    
+
+def login_customer(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        print(username, password)
+
+        if username and password:
+            user = authenticate(username=username, password=password)
+            if user:
+                login(request, user)
+                return JsonResponse({'message': 'Login successful.'}, status=200)
+            else:
+                return JsonResponse({'error': 'Invalid credentials.'}, status=400)
+        else:
+            return JsonResponse({'error': 'Invalid credentials.'}, status=400)
+    else:
+        return JsonResponse({'error': 'Wrong request method.'}, status=400)
+    
+
+
+
+

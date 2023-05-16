@@ -1,0 +1,245 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Orders</title>
+</head>
+<body>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-size: 13px;
+        }
+        html, body{
+            height: 100%;
+            font-size: 13px;
+        }
+        body{
+            font-family: 'Roboto', sans-serif;
+        }
+        .container {
+            padding: 2%;
+            height: 100%;
+            width: 100%;
+        }
+        .text-right{
+            text-align: right;
+        }
+        .text-left{
+            text-align: left;
+        }
+        .padding-left-text{
+            padding-left: 10px;
+        }
+        p, td{
+            margin: 0;
+            
+        }
+        .row{
+
+            width:100%;
+
+        }
+        .col{
+            width: 50%;
+        }
+        .row-left{
+            float: left;
+        }
+        .row-right{
+            float: right;
+        }
+        table{
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table>thead{
+            border-top: 1px solid black;
+        }
+       
+        table th, td{
+            font-size: 13px;
+            font-weight: normal;
+        }
+        .gap-left{
+            margin-left: 20px;
+        }
+        .main-table th, td{
+            padding: 10px 0px;
+        }
+        .secondary-table th, td{
+            padding: 5px 0px;
+        }
+
+    </style>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col" style="float: left; width:50%;">
+                <img src="https://i.ibb.co/qxNBzh9/logo.png" alt="" width="200" height="200" >
+            </div>
+            <div class="col" style="width: 50%; display:inline-block">
+                <h2 style="font-size: 24px;">Faktura</h2>
+                <div style="float: right;">
+                    <div class="row-left">
+                        <p class="text-left">Fakturadatum</p>
+                        <p class="text-left">Phone: </p>
+                        <p class="text-left">Email:</p>
+                    </div>
+                    <div class="row-right gap-left">
+                        <p>123123</p>
+                        <p>123123</p>
+                        <p>123123</p>
+                    </div>
+                </div>
+                <div style="width:100%; float:left">
+                    <p><strong>SBK SWEDEN AB</strong></p>
+                    <p><strong>ZZZZZZZZZ</strong></p>
+                    <p><strong>120 44 </strong></p>
+                    <p><strong>SBK SWEDEN AB</strong></p>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding: 30px 0px 15px 0px; float:left">
+            <div class="col">
+                <div style="float:left">
+                    <div class="row-left">
+                        <p class="text-left">Kundnr</p>
+                        <p class="text-left">Er referens </p>
+                        <p class="text-left">En VAT-nummer</p>
+                    </div>
+                    <div class="row-right gap-left">
+                        <p>32</p>
+                        <p>Lesna Havez</p>
+                        <p>SE12312312312</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col" style="float:right">
+                <div style="float: left">
+                    <div class="row-left">
+                        <p class="text-left">Var Referens</p>
+                        <p class="text-left">Betalningsvillkor </p>
+                        <p class="text-left">Forfallodatum</p>
+                        <p class="text-left">Drojsmalsranta</p>
+                        <p class="text-left">Leveransdatum</p>
+                        <p class="text-left">Vart ordernr</p>
+                    </div>
+                    <div class="row-right gap-left">
+                        <p>Vladimir Mitev</p>
+                        <p>10 dagar</p>
+                        <p>2020-20-12</p>
+                        <p>8%</p>
+                        <p>2020-20-12</p>
+                        <p>195</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1%">
+            <table class="main-table">
+                <thead style="border-bottom: 1px solid black;">
+                    <tr>
+                        <th class="text-left">Artnr</th>
+                        <th class="text-left">Benamning</th>
+                        <th style="text-align:center;">Lev ant</th>
+                        <th class="text-left">Enh</th>
+                        <th class="text-right">Pris</th>
+                        <th class="text-right">Summa</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.orderitem_set.all %}
+                    <tr>
+                        <td class="text-left">{{ item.product.sku }}</td>
+                        <td class="text-left">{{ item.product.name }}</td>
+                        <td style="text-align:center;">{{ item.total_price }}</td>
+                        <td class="text-left">kg</td>
+                        <td class="text-right">14,00</td>
+                        <td class="text-right">{{ item.total_price }}</td>
+                    {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row" style="padding:2%;position:absolute;bottom:0;">
+            <div class="row">
+                <table class="secondary-table">
+                    <thead>
+                        <tr>
+                            <th class="text-left">Exkl. moms</th>
+                            <th class="text-left">Moms</th>
+                            <th style="text-align:center;">Oresavr</th>
+                            <th style="text-align:center;">Totalt</th>
+                            <th class="text-right" style="font-weight:bold">ATT BETALA</th>
+                        </tr>
+                    </thead>
+                    <tbody style="border-bottom: 1px solid black;">
+                        <tr>
+                            <td class="text-left">45 360,00</td>
+                            <td class="text-left">5443,20</td>
+                            <td style="text-align:center;">-0,20</td>
+                            <td style="text-align:center;">{{ order.total_price }}</td>
+                            <td class="text-right" style="font-size: 18px; font-weight: bolder;">SEK {{ order.total_price }}</td>
+    
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row" style="padding:10px 0px;">
+                <div class="col" style="float:left">
+                    <p>Moms 12% 5 443,20 (45 360,00)</p>
+                </div>
+                <div class="col" style="float:right; text-align:right">
+                    <p>IBAN SE71 8000 0845 2569 4946 4397 BIV SWESES</p>
+                    
+                </div>
+            </div>
+            <div class="row" style="padding-top: 30px">
+                <div class="col" style="float: left">
+                    <div style="width: 100%;">
+                        <div class="row-left" style="float:left">
+                            <p class="text-left">Adress</p>
+                            <p class="text-left">Balkan Mat i Sverige AB</p>
+                            <p class="text-left">Stinavagen 3 </p>
+                            <p class="text-left">69154 KARLSKOGA</p>
+                            <p class="text-left">Sverige</p>
+                            <p class="text-left">Vart ordernr</p>
+                        </div>
+                        <div class="row-right" style="float:right">
+                            <p>Telefon</p>
+                            <p>0586 21  75 81</p><br>
+                            <p>E post</p>
+                            <p>info@balkanmat.store</p><br>
+                            <p>Webbaddress</p>
+                            <p>www.balkanmat.store</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col" style="float: right">
+                    <div style="float: right">
+                        <div class="row-left">
+                            <p class="text-left">Bankgiro</p>
+                            <p class="text-left">5447-0612</p><br>
+                            <p class="text-left">Sate</p>
+                            <p class="text-left">Karlskoga</p>
+                        </div>
+                        <div class="row-right gap-left" style="padding-left:10px;">
+                            <p>Organisationsnr</p>
+                            <p>51435135135</p><br>
+                            <p>Momsreg. nr</p>
+                            <p>SE12312312321312</p><br>
+                            <p>Godkand for F-skatt</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</body>
+</html>

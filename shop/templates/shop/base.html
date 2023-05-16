@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{% static 'shopmanager/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'shop/css/main.css' %}">
+</head>
+<body style="background-color:#f2f6fc!important">
+    <style>
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            /* display: none; <- Crashes Chrome on hover */
+            -webkit-appearance: none;
+            margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+        }
+
+        input[type=number] {
+            -moz-appearance:textfield; /* Firefox */
+        }
+        .cursor-pointer{
+            cursor: pointer;
+        }
+        .grow { 
+        transition: all .2s ease-in-out; 
+        }
+
+        .grow:hover { 
+        transform: scale(1.02); 
+        }
+    </style>
+    <div class="page-container">
+        {% include "shop/includes/header.html" %}
+        {% block content %}{% endblock content %}
+        {% include "shop/includes/footer.html" %}
+    </div> 
+    
+    <script src="{% static 'shop/js/jquery.js' %}"></script>
+    <script src="{% static 'shopmanager/js/bootstrap.js' %}"></script>
+    {% block scripts %}{% endblock scripts %}
+</body>
+</html>

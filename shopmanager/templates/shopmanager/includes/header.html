@@ -1,0 +1,36 @@
+{% load admin_urls %}
+
+<nav class="navbar navbar-expand-lg bg-dark sticky-top" data-bs-theme="dark">
+    <div class="container-xxl ">
+        <a href="{% url 'shopmanager:shopmanager-home' %}" class="navbar-brand text-white">Shopmanager home</a>
+    
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#shopmanager-navbarNav" aria-controls="shopmanager-navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="shopmanager-navbarNav">
+            <div class="navbar-nav">
+                {% if title == 'Shop Manager Home' %}
+                <a href="#new_registrations" class="nav-link" style="position:relative">New Registrations<span style="position:relative;bottom:5px;left:2px;font-weight:600;" class="text-warning">{{ new_registrations_count }}</span></a>
+                {% else %}
+                <a href="{% url 'shopmanager:shopmanager-home' %}#new_registrations" class="nav-link" style="position:relative">New Registrations<span style="position:relative;bottom:5px;left:2px;font-weight:600;" class="text-warning">{{ new_registrations_count }}</span></a>
+                {% endif %}
+                <div class="dropdown nav-item">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        View Orders
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="p-2"><input class="form-control" type="search" placeholder="Search" aria-label="Search"></li>
+                        <li><a class="dropdown-item" href="{% url 'shopmanager:shopmanager-view-orders' 0 %}">All</a></li>
+                        {% for organization in organizations %}
+                            <li><a class="dropdown-item" href="{% url 'shopmanager:shopmanager-view-orders' organization.id %}">{{ organization.business_name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>        
+            </div>
+            <div class="navbar-nav navbar-nav-right-side-items">
+                <a href="{% url 'admin:index' %}" class="nav-link" target="_blank">Go to admin</a>
+                <a href="{% url 'shop:shop-home' %}" class="nav-link" >Go to Shop</a>
+            </div>
+        </div> 
+    </div>
+</nav>

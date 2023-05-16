@@ -1,0 +1,86 @@
+{% extends 'shopmanager/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="container-xxl">
+        <div class="row p-2 my-3 row-cols-lg-6 row-cols-md-4 row-cols-sm-2 g-4 text-center">
+            <div class="col-12 w-100 text-primary">
+                <h3>Stock Status</h3>
+            </div>
+            {% for product in products %}
+                    <div class="col">
+                        {% if product.stock > 50 %}
+                        <div class="card bg-success text-white">
+                        {% elif product.stock == 0 %}
+                        <div class="card bg-danger text-white">
+                        {% else %}
+                        <div class="card bg-warning text-dark">
+                        {% endif %}
+                            <div class="card-body">
+                                <p class="fw-bolder">{{ product.name }}</p>
+                                <div>Stock: <span class="fw-bold">{{ product.stock }}</span></div>
+                            </div>
+                            <div class="card-footer">
+                                <a href="{{ product.get_admin_url }}" target="_blank" class="btn btn-sm btn-dark">Update stock</a>
+                            </div>
+                        </div>
+                    </div>
+            {% endfor %}
+        </div>
+        <div class="row p-2 my-3 g-4 text-center">
+            <div class="col-12 w-100 text-center text-primary">
+                <h3>Prices per user class</h3>
+            </div>
+            {% for user_class in user_classes %}
+            <div class="col col-12 col-md-6 col-lg-4 col-xl-3">
+                <div class="card bg-dark text-white" >
+                    <div class="card-header fw-bold d-flex justify-content-between align-items-center flex-wrap">
+                        <div>
+                            {{ user_class.name }}
+                        </div>
+                        <a href="{{ user_class.get_admin_url }}" class="btn btn-sm btn-primary" target="_blank">Edit</a>
+                    </div>
+                    <ul class="list-group list-group-flush bg-primary">
+                    {% for product in user_class.productprice_set.all %}
+                    <li class="list-group-item">{{ product.product.name }} - {{ product.price }} мкд</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endfor %}   
+        </div>
+        <div class="row p-2 my-3 g-4 text-left" id="new_registrations">
+            <div class="col-12 w-100 text-center text-primary">
+                <h3>New registrations</h3>
+            </div>
+            {% for applicant in register_applications %}
+            <div class="col col-12 col-lg-6 col-xl-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="text-bold text-primary pb-3 fs-5 fw-bold">{{ applicant.business_name }}<div class=" fw-normal fs-6 font-italic">{{ applicant.created_at }}</div></div>
+
+                        <div>{{ applicant.contact_person }}</div>
+                        <div>{{ applicant.phone_number }}</div>
+                        <div>{{ applicant.email }}</div>
+                        <div>{{ applicant.city }}</div>
+                        <div>{{ applicant.address }}</div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <button class="btn btn-sm btn-secondary">Dismiss</button>
+                        <button class="btn btn-sm btn-success">Approve</button>
+                    </div>
+                    
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        
+    </div>
+{% endblock content %}
+
+{% block scripts %}
+    <script src="{% static 'shopmanager/js/main.js' %}"></script>
+{% endblock scripts %}
