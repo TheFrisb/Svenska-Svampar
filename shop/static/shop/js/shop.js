@@ -34,30 +34,148 @@ function calculateCartTotal(cartModalBody){
 }
 
 
+function alert_remove_classes(alert){
+    if($(alert).hasClass("alert-success")){
+        $(alert).removeClass("alert-success");
+    }
+    if($(alert).hasClass("alert-danger")){
+        $(alert).removeClass("alert-danger");
+    }
+    if($(alert).hasClass("alert-warning")){
+        $(alert).removeClass("alert-warning");
+    }
+    return 
+}
 
 $(document).ready(function(){
     let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
     let loginModal = $("#loginModal");
+    let registerModal = $("#registerModal");
     let wrongLoginInformation = $("#wrongLoginInformation");
     let cartModal = $("#cartModal");
     let cartModalBody = $("#cardModalBody");
     let alert = $("#alert");
-    let cartQuantity = 0;
+    let alert_text = $("#alert_text");
+    let cartAlert = $("#cartAlert");
+    let cartAlertText = $("#cart_alert_text");
+    let cartBanner = $("#cartBanner");
+    let cartQuantityHolder = $("#cartQuantity");
+    let cartQuantity = parseInt(cartQuantityHolder.text());
     let cartItemTemplate = $(".cartItem").first().clone();
     cartItemTemplate.removeClass("d-none");
     let cartTotalHolder = $("#cartTotal");
-    console.log(cartItemTemplate)
 
-    $(document).on("click", "#openCart", function(e){
+    $(document).on("click", "#cart", function(e){
         e.preventDefault();
-        $(cartModal).modal("show");
+        if(cartQuantity === 0){
+            $(cartBanner).removeClass("d-none");
+
+            // wait for 6 seconds
+            setTimeout(function(){
+                if(cartBanner.hasClass("d-none") === false){
+                    $(cartBanner).addClass("d-none");
+                };
+            }, 6000);
+            
+            return;
+        }
+        else{ 
+            $(cartModal).modal("show"); 
+        }
+        
     });
+    $(loginModal).on('shown.bs.modal', function() {
+        $('#login_username').focus();
+        $(document).on('keyup.login', function(event) {
+            if (event.key == 'Enter') {
+                $('#loginBtn').click();
+            }
+            
+        });
+    })
 
     $(loginModal).on('hide.bs.modal', function (e) {
         if($(wrongLoginInformation).hasClass('d-none') === false){
             $(wrongLoginInformation).addClass('d-none');
         }
+        
+        $(document).off('keyup.login');
       });
+
+    $(registerModal).on('shown.bs.modal', function() {
+        $('#registrant_business_name').focus();
+        $(document).on('keyup.register', function(event) {
+            if (event.key == 'Enter') {
+                $('#registerBtn').click();
+            }
+        });
+    })
+
+    $(registerModal).on('hide.bs.modal', function (e) {
+        $(document).off('keyup.register');
+    });
+    $(document).on("click", ".close_alert_button", function(e){
+        e.preventDefault();
+        let closest_alert = $(this).closest(".alert");
+        // check if does not have d-none class
+        if($(closest_alert).hasClass("d-none") === false){
+            $(closest_alert).addClass("d-none");
+        }
+    });
+    $(document).on("click", "#registerBtn", function(e){
+        let business_name = $("#registrant_business_name").val();
+        let city = $("#registrant_city").val();
+        let address = $("#registrant_address").val();
+        let contact_person = $("#registrant_contact_person").val();
+        let email = $("#registrant_email").val();
+        let phone_number = $("#registrant_phone_number").val();
+
+        if(business_name.trim() === "" || city.trim() === "" || address.trim() === "" || contact_person.trim() === "" || email.trim() === "" || phone_number.trim() === ""){
+            $("#invalidRegisterForm").html("Please fill all fields").removeClass("d-none");
+            // scroll modal to top
+            $(registerModal).animate({ scrollTop: 0 }, "slow");
+            return;
+        }
+        if(email.includes("@") === false){
+            $("#registrant_email").addClass("border-danger").focus();
+            $("#invalidRegisterForm").html("Invalid email address").removeClass("d-none");
+            $(registerModal).animate({ scrollTop: 0 }, "slow");
+            return;
+        }
+
+        $.ajax({
+            url: 'shopmanager/register-applicant/',
+            type: 'POST',
+            data: {
+                'business_name': business_name,
+                'city': city,
+                'address': address,
+                'contact_person': contact_person,
+                'email': email,
+                'phone_number': phone_number,
+                csrfmiddlewaretoken: csrf_token,
+            },
+            dataType: 'json',
+            success: function(data){
+                $(registerModal).modal("hide");
+                alert_remove_classes(alert);
+                $(alert).addClass("alert-success");
+                $(alert).removeClass("d-none");
+                $(alert_text).text("Your application has been submitted. We will contact you soon.");
+                $("html, body").animate({ scrollTop: 0 }, "slow");
+
+
+                console.log('SUCCESS')
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                console.log(xhr.responseText);
+                console.log('error')
+                
+              }
+
+        })
+
+    });
 
     $(document).on("click", "#navLogin", function(e){
         e.preventDefault();
@@ -66,8 +184,8 @@ $(document).ready(function(){
 
     $(document).on("click", "#loginBtn", function(e){
         e.preventDefault();
-        let username = $("#username").val();
-        let password = $("#password").val();
+        let username = $("#login_username").val();
+        let password = $("#login_password").val();
         if(username.trim() === "" || password.trim() === ""){
             // toggle class then wait for 6 seconds and toggle class again
             $(wrongLoginInformation).removeClass("d-none");
@@ -135,6 +253,7 @@ $(document).ready(function(){
                 if(cartQuantity === 0){
                     $(cartModal).modal("hide");
                 }
+                cartQuantityHolder.text(cartQuantity);
                 }
             else{
                 quantityInput.val(quantityValue);
@@ -198,17 +317,33 @@ $(document).ready(function(){
 
                 cartModalBody.append(cartItem);
                 cartQuantity += 1;
+                cartQuantityHolder.text(cartQuantity);
                 cartTotalHolder.text(calculateCartTotal(cartModalBody));
             },
             error: function(xhr, textStatus, errorThrown) {
-                // Process the error response
-                alert.text('There is not enough quantity of this product!. We will contact you shortly!');
+                // get list of products with not available quantity
+                alert_remove_classes(alert);
+                alert.addClass("alert-danger");
+                alert_text.html('There is not enough quantity of this product!. We will contact you shortly!');
                 alert.removeClass("d-none");
+                $('html, body').animate({scrollTop:0}, 'slow', function(){
+                    if(alert.hasClass("growAlert")){
+                        alert.removeClass("growAlert");
+                        alert.addClass("growAlert");
+                    }
+                    else{
+                        alert.addClass("growAlert");
+                    }
+                });
               }
         })
     });
 
     $(document).on("click", "#place_orderBtn", function(e){
+        // add bootsrtap 5 spinner
+        let button= $(this);
+        button.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>');
+
         cartItems = {};
         let cartItemsList = $(cartModalBody).find(".cartItem");
         for(let i = 0; i < cartItemsList.length; i++){
@@ -226,16 +361,95 @@ $(document).ready(function(){
             },
             dataType: 'json',
             success: function(data){
-                // refresh
-                location.reload();
+
+                // get ordered products with price and quantity
+
+                let products = data.products;
+                let new_order_html = "Your order has been placed successfully!<br><br>";
+                for(let i = 0; i < products.length; i++){
+                    let product = products[i];
+                    new_order_html += "<strong>" + product.name + " - " + product.quantity + " x " + product.price + " = " + product.total_price + "</strong><br>";
+                }
+                new_order_html += "<br><strong>Total: " + data.order_total + "</strong>";
+
+
+                $(cartModal).modal("hide");
+                button.html('Purchase');
+                alert_remove_classes(alert);
+                alert.addClass("alert-success");
+                alert_text.html(new_order_html);
+                alert.removeClass("d-none");
+                $('html, body').animate({scrollTop:0}, 'slow', function(){
+                    if(alert.hasClass("growAlert")){
+                        alert.removeClass("growAlert");
+                        alert.addClass("growAlert");
+                    }
+                    else{
+                        alert.addClass("growAlert");
+                    }
+                });
+                cartModalBody.empty();
+                cartQuantity = 0;
+                cartQuantityHolder.text(cartQuantity);
+                cartTotalHolder.text(calculateCartTotal(cartModalBody));
+                
+
             },
             error: function(xhr, textStatus, errorThrown) {
-                // get list insufficient_stock_items from response
-                alert.text('There was an error in placing your order. Please try again later!');
-                alert.removeClass("d-none");
+                button.html('Purchase');
+                let products = xhr.responseJSON.insufficient_stock_items;
+                let error_product_names = "";
+                for(let i = 0; i < products.length; i++){
+                    let product_id = parseInt(products[i]);
+                    let errorCartItem = $(cartModalBody).find(`.cartItem[data-product-id=${product_id}]`);
+                    let errorProductName = $(errorCartItem).find(".cartItemName").text();
+                    error_product_names += errorProductName;
+                    if(i < products.length - 1){
+                        error_product_names += ", ";
+                    };
+                    errorCartItem.remove();
+                    cartQuantity -= 1;
+                }
+                cartQuantityHolder.text(cartQuantity);
+                cartTotalHolder.text(calculateCartTotal(cartModalBody));
+                if(cartQuantity === 0){
+                    $(cartModal).modal("hide");
+                    alert_remove_classes(alert);
+                    alert.addClass("alert-danger");
+                    alert_text.text('The following product were removed from your cart due to not enough stock: ' + error_product_names + '. You can stil purchase the other ones!. We will contact you shortly!');
+                    alert.removeClass("d-none");
+                    $('html, body').animate({scrollTop:0}, 'slow', function(){
+                        if(alert.hasClass("growAlert")){
+                            alert.removeClass("growAlert");
+                            alert.addClass("growAlert");
+                        }
+                        else{
+                            alert.addClass("growAlert");
+                        }
+                    });
+                }
+                else{
+                    $(cartModalBody).animate({scrollTop:0}, 'slow');
+                    cartAlertText.text('The following product were removed from your cart due to not enough stock: ' + error_product_names + '. You can stil purchase the other ones!. We will contact you shortly!');
+                    cartAlert.removeClass("d-none");
+                    // check if on top of page
+                    if($(cartModalBody).scrollTop() === 0){
+                        if(cartAlert.hasClass("growAlert")){
+                            cartAlert.removeClass("growAlert");
+                            cartAlert.addClass("growAlert");
+                        }
+                        else{
+                            cartAlert.addClass("growAlert");
+                        }
+                    }
+
+
+                }
               }
         })
     });
+
+
 
 
 });

@@ -89,16 +89,16 @@
                         <p class="text-left">Email:</p>
                     </div>
                     <div class="row-right gap-left">
-                        <p>123123</p>
-                        <p>123123</p>
+                        <p>{{ order.created_at|date:"Y/m/d" }}</p>
+                        <p>asd</p>
                         <p>123123</p>
                     </div>
                 </div>
                 <div style="width:100%; float:left">
-                    <p><strong>SBK SWEDEN AB</strong></p>
-                    <p><strong>ZZZZZZZZZ</strong></p>
-                    <p><strong>120 44 </strong></p>
-                    <p><strong>SBK SWEDEN AB</strong></p>
+                    <p><strong>{{ organization.business_name }}</strong></p>
+                    <p><strong>{{ organization.address }}</strong></p>
+                    <p><strong>{{ organization.city }}</strong></p>
+                
                 </div>
             </div>
         </div>
@@ -111,9 +111,9 @@
                         <p class="text-left">En VAT-nummer</p>
                     </div>
                     <div class="row-right gap-left">
-                        <p>32</p>
-                        <p>Lesna Havez</p>
-                        <p>SE12312312312</p>
+                        <p>{{ organization.id }}</p>
+                        <p>{{ organization.contact_person }}</p>
+                        <p>{{ organization.organization_number }}</p>
                     </div>
                 </div>
             </div>
@@ -130,10 +130,10 @@
                     <div class="row-right gap-left">
                         <p>Vladimir Mitev</p>
                         <p>10 dagar</p>
-                        <p>2020-20-12</p>
+                        <p>{{ date_plus_10_days }}</p>
                         <p>8%</p>
-                        <p>2020-20-12</p>
-                        <p>195</p>
+                        <p>I do not know</p>
+                        <p>{{ order.id }}</p>
                     </div>
                 </div>
             </div>
@@ -157,7 +157,7 @@
                         <td class="text-left">{{ item.product.name }}</td>
                         <td style="text-align:center;">{{ item.total_price }}</td>
                         <td class="text-left">kg</td>
-                        <td class="text-right">14,00</td>
+                        <td class="text-right">{{ item.price_each }}</td>
                         <td class="text-right">{{ item.total_price }}</td>
                     {% endfor %}
                     </tr>
@@ -178,8 +178,8 @@
                     </thead>
                     <tbody style="border-bottom: 1px solid black;">
                         <tr>
-                            <td class="text-left">45 360,00</td>
-                            <td class="text-left">5443,20</td>
+                            <td class="text-left">{{ order.subtotal_price }}</td>
+                            <td class="text-left">{{ order.tax }}</td>
                             <td style="text-align:center;">-0,20</td>
                             <td style="text-align:center;">{{ order.total_price }}</td>
                             <td class="text-right" style="font-size: 18px; font-weight: bolder;">SEK {{ order.total_price }}</td>
@@ -190,7 +190,7 @@
             </div>
             <div class="row" style="padding:10px 0px;">
                 <div class="col" style="float:left">
-                    <p>Moms 12% 5 443,20 (45 360,00)</p>
+                    <p>Moms 12% {{ order.subtotal_price }} ({{ order.total_price }})</p>
                 </div>
                 <div class="col" style="float:right; text-align:right">
                     <p>IBAN SE71 8000 0845 2569 4946 4397 BIV SWESES</p>
@@ -202,23 +202,21 @@
                     <div style="width: 100%;">
                         <div class="row-left" style="float:left">
                             <p class="text-left">Adress</p>
-                            <p class="text-left">Balkan Mat i Sverige AB</p>
-                            <p class="text-left">Stinavagen 3 </p>
-                            <p class="text-left">69154 KARLSKOGA</p>
-                            <p class="text-left">Sverige</p>
-                            <p class="text-left">Vart ordernr</p>
+                            <p class="text-left">Mitson Bär & Svamp AB</p>
+                            <p class="text-left">Stinavägen 3</p>
+                            <p class="text-left">691 54 KARLSKOGA</p>
                         </div>
                         <div class="row-right" style="float:right">
                             <p>Telefon</p>
-                            <p>0586 21  75 81</p><br>
+                            <p>+46 73 666 71 67</p><br>
                             <p>E post</p>
-                            <p>info@balkanmat.store</p><br>
+                            <p>info@mitson.se</p><br>
                             <p>Webbaddress</p>
-                            <p>www.balkanmat.store</p>
+                            <p>www.miton.se</p>
                         </div>
                     </div>
                 </div>
-                <div class="col" style="float: right">
+                <!-- <div class="col" style="float: right">
                     <div style="float: right">
                         <div class="row-left">
                             <p class="text-left">Bankgiro</p>
@@ -234,7 +232,7 @@
                             <p>Godkand for F-skatt</p>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
 

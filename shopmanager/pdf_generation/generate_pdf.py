@@ -16,10 +16,10 @@ def export_orders_as_pdf():
     context = {'organization': organization, 'orders': orders}
     html = template.render(context)
 
-    # Path for the output PDF file
-    output_filename = os.path.join(settings.MEDIA_ROOT, 'orders.pdf')
+    
+    output_filename = os.path.join(settings.MEDIA_ROOT, 'orders.pdf') # File path
 
-    config = pdfkit.configuration(wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')  # specify path to your wkhtmltopdf installation here
+    config = pdfkit.configuration(wkhtmltopdf='C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe')  # wkhtmltopdf path
     pdfkit.from_string(html, output_filename, configuration=config)
     print('PDF generated at: ' + output_filename)
     return output_filename

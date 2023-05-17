@@ -11,16 +11,16 @@ from django.contrib.contenttypes.models import ContentType
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    business_name = models.CharField(max_length=100, blank=True, unique=True)
-    organization_number = models.CharField(max_length=100, blank=True)
-    contact_person = models.CharField(max_length=100, blank=True)
-    phone_number = models.CharField(max_length=100, blank=True)
-    email = models.CharField(max_length=100, blank=True)
-    address = models.CharField(max_length=100, blank=True)
-    postal_code = models.CharField(max_length=100, blank=True)
-    city = models.CharField(max_length=100, blank=True)
-    user_class = models.ForeignKey('UserClass', on_delete=models.SET_NULL, blank=True, null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='Account')
+    business_name = models.CharField(max_length=100, blank=True, unique=True, verbose_name='Business Name')
+    organization_number = models.CharField(max_length=100, blank=True, unique=True, verbose_name='Organization Number')
+    contact_person = models.CharField(max_length=100, blank=True, verbose_name='Contact Person')
+    phone_number = models.CharField(max_length=100, blank=True, verbose_name='Phone Number')
+    email = models.CharField(max_length=100, blank=True, verbose_name='Email')
+    address = models.CharField(max_length=100, blank=True, verbose_name='Address')
+    postal_code = models.CharField(max_length=100, blank=True, verbose_name='Postal Code')
+    city = models.CharField(max_length=100, blank=True, verbose_name='City')
+    user_class = models.ForeignKey('UserClass', on_delete=models.SET_NULL, blank=True, null=True, verbose_name='User Class')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -37,14 +37,14 @@ class UserProfile(models.Model):
 
 
 class Product(models.Model):
-    name = models.CharField(max_length = 100)
-    stock = models.IntegerField()
-    thumbnail = ProcessedImageField(upload_to='products/thumbnails/%Y/%m/%d/', processors=[ResizeToFill(550,550)], format='WEBP')
-    created_at = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length = 100, verbose_name='Name')
+    stock = models.IntegerField(verbose_name='Stock')
+    thumbnail = ProcessedImageField(upload_to='products/thumbnails/%Y/%m/%d/', processors=[ResizeToFill(550,550)], format='WEBP', options={'quality': 100}, verbose_name='Thumbnail')
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
     mail_status = models.BooleanField(default=True)
-    sku = models.CharField(max_length=100, blank=True, null=True)
-    ean_code = models.CharField(max_length=100, blank=True, null=True)
+    sku = models.CharField(max_length=100, blank=True, null=True, verbose_name='SKU')
+    ean_code = models.CharField(max_length=100, blank=True, null=True, verbose_name='EAN Code')
     def __str__(self):
         return f'{self.name} - {self.stock} stock'
     
@@ -60,8 +60,8 @@ class Product(models.Model):
 
 
 class UserClass(models.Model):
-    name = models.CharField(max_length=100)
-    products = models.ManyToManyField(Product, through='ProductPrice')
+    name = models.CharField(max_length=100, verbose_name='Name')
+    products = models.ManyToManyField(Product, through='ProductPrice', verbose_name='Products')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -80,9 +80,9 @@ class UserClass(models.Model):
 
 
 class ProductPrice(models.Model):
-    product = models.ForeignKey('Product', on_delete=models.CASCADE)
-    price = models.IntegerField()
-    user_class = models.ForeignKey(UserClass, on_delete=models.CASCADE)
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, verbose_name='Product')
+    price = models.IntegerField(verbose_name='Price')
+    user_class = models.ForeignKey(UserClass, on_delete=models.CASCADE, verbose_name='User Class')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -95,13 +95,15 @@ class ProductPrice(models.Model):
 
 
 class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    order_date = models.DateTimeField(auto_now_add=True)
-    total_price = models.IntegerField(null = True)
-    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    is_mail_sent = models.BooleanField(default=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
+    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, verbose_name='User Profile')
+    order_date = models.DateTimeField(auto_now_add=True, verbose_name='Order Date')
+    subtotal_price = models.IntegerField(null = True, verbose_name='Subtotal Price (excl. VAT)')
+    total_price = models.IntegerField(null = True, verbose_name='Total Price')
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Created At')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='Updated At')
+    is_mail_sent = models.BooleanField(default=False, verbose_name='Is Mail Sent?')
+
 
     def __str__(self):
         return f'Order #{self.id} - {self.user.username}'
@@ -109,18 +111,23 @@ class Order(models.Model):
     class Meta:
         verbose_name_plural = 'Orders'
         verbose_name = 'Order'
+        ordering = ['-created_at']
+
+
+
 
     @property
     def get_admin_url(self):
         content_type = ContentType.objects.get_for_model(self.__class__)
         return reverse(f'admin:{content_type.app_label}_{content_type.model}_change', args=(self.id,))
 
+
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
-    quantity = models.IntegerField()
-    price_each = models.IntegerField()
-    total_price = models.IntegerField()
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, verbose_name='Order')
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, verbose_name='Product')
+    quantity = models.IntegerField(verbose_name='Quantity')
+    price_each = models.IntegerField(verbose_name='Price Each')
+    total_price = models.IntegerField(verbose_name='Total Price')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -20,12 +20,12 @@
                     <div class="card-text fw-semibold fs-5">Order #{{ order.id }}</div>
                     <div class="card-text fw-semibold">{{ order.total_price }} eur</div>
                   </div>
-                  <div class="pb-3">{{ order.created_at|date:"y/m/d" }}</div>
+                  <div class="pb-3">{{ order.created_at|date:"y/m/d H:i:s" }}</div>
                   {% for item in order.orderitem_set.all %}
                         <div class="card-text">{{ item.product.name }} x {{ item.quantity }} - {{ item.total_price }} eur</div>
                   {% endfor %}
                   <div class="d-flex flex-wrap justify-content-between align-items-center">
-                    <a href="{{ order.get_admin_url }}" class="btn btn-sm btn-dark mt-3">Edit</a>
+                    <a href="{{ order.get_admin_url }}" class="btn btn-sm btn-dark mt-3" target="_blank">Edit</a>
                     <a href="{% url 'shopmanager:export-orders-as-pdf' order.user_profile.id %}" class="btn btn-sm btn-primary mt-3" target="_blank">Generate PDF</a>
                 </div>
                 </div>

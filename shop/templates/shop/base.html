@@ -31,6 +31,58 @@
         .grow:hover { 
         transform: scale(1.02); 
         }
+        #cart{
+            width:90px; 
+            height:90px; 
+            border-radius:50%!important; 
+            position:fixed!important;
+            right:5%;
+            bottom:5%;
+            cursor: pointer;
+            box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: all .2s ease-in-out; 
+        }
+
+        #cart:hover{
+            transform: scale(1.1);
+            
+        }
+        #cartQuantity{
+            position: absolute;
+            top: 0;
+            right: 0;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #870033!important;
+            
+        }
+        #cartBanner{
+            position:fixed!important;
+            bottom: calc(5% + 90px);
+            right: 5%;
+            width: 220px;
+            
+        }
+
+        @keyframes growAlert{
+            0% { transform: rotate(0deg); }
+            10%, 30%, 50%, 70%, 90% { transform: rotate(2deg); }
+            20%, 40%, 60%, 80% { transform: rotate(-2deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        .growAlert{
+            animation: growAlert 2s;
+            
+        }
     </style>
     <div class="page-container">
         {% include "shop/includes/header.html" %}

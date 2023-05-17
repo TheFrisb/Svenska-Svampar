@@ -3,16 +3,13 @@
 {% block content %}
 {% csrf_token %}
 <div class="container-xxl py-4">
-    <div class="alert alert-warning d-none" role="alert" id="alert"></div>
-    <div class="row">
-        <div class="col-12 py-4">
-            <button class="btn btn-success btn-lg" id="openCart">Open cart</button>
-        </div>
-        <div class="col-12 py-1">
-            <h5 id="response">asd</h5>
-        </div>
-    </div>
+    <div class="alert alert-dismissible d-none" role="alert" id="alert">
+        <div id="alert_text"></div>
+        <button type="button" class="btn-close close_alert_button"></button>
+      </div>
+    
     <div class="row g-4">
+        
         {% for product, price in product_prices.items %}
         <div class="col-12 col-sm-6  col-md-4 col-lg-3 ">
             <div class="card text-center h-100 grow productCard" style="box-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.25);">
@@ -57,7 +54,7 @@
                     {% endif %}
                     {% if not user_profile %}
                             <button class="btn btn-success w-100 mt-3" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
-                            <button class="btn btn-dark w-100 mt-2">Ask to register</button>
+                            <button class="btn btn-dark w-100 mt-2" data-bs-toggle="modal" data-bs-target="#registerModal">Ask to register</button>
                         </div>
                     {% else %}
                         </div>
@@ -82,6 +79,7 @@
   
   <!-- Login modal -->
 {% if not user_profile %}
+
     <div class="modal fade " id="loginModal" tabindex="-1" aria-labelledby="loginModal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border border-2 border-primary">
@@ -97,11 +95,11 @@
 
                 <div class="m-2">
                     <label for="username" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="username" placeholder="Username" name="">
+                    <input type="text" class="form-control" id="login_username" placeholder="Username" name="">
                 </div>
                 <div class="m-2">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" placeholder="Username" name="password">
+                    <input type="password" class="form-control" id="login_password" placeholder="Username" name="password">
                 </div>
                 <div class="m-2 mt-4">
                     <button class="btn btn-primary w-100" id="loginBtn">Login</button>
@@ -111,8 +109,64 @@
         </div>
         </div>
     </div>
+    <div class="modal fade " id="registerModal" tabindex="-1" aria-labelledby="registerModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border border-2 border-primary">
+        
+            <div class="modal-body">
+                <div class="text-center" id="login_modal_append">
+                    <h3 class="text-primary">Register</h3>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="position:absolute!important;right:1.5rem!important;top:1.5rem!important;"></button>
+                </div>
+                <div class="alert alert-danger alert-dismissible d-none" role="alert" id="invalidRegisterForm">
+                    <strong>The fields marked with </strong>
+                </div>
+                
+                <div class="m-2">
+                    <label for="business_name" class="form-label">Business name</label>
+                    <input type="text" class="form-control" name="business_name" id="registrant_business_name">
+                </div>
+                <div class="m-2">
+                    <label for="city" class="form-label">City</label>
+                    <input type="text" class="form-control" name="city" id="registrant_city">
+                </div>
+                <div class="m-2">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" class="form-control" name="address" id="registrant_address">
+                </div>
+                <div class="m-2">
+                    <label for="contact_person" class="form-label">Contact person</label>
+                    <input type="text" class="form-control" name="contact_person" id="registrant_contact_person">
+                </div>
+                <div class="m-2">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" name="email" id="registrant_email">
+                </div>
+                <div class="m-2">
+                    <label for="phone_number" class="form-label">Phone number</label>
+                    <input type="text" class="form-control" name="phone_number" id="registrant_phone_number">
+                </div>
+                <div class="m-2 mt-4">
+                    <button class="btn btn-primary w-100" id="registerBtn">Register</button>
+                </div>
+                    
+                    
+                
+
+            </div>
+        </div>
+        </div>
+    </div>
+
 {% else %}
 <!-- CartItem Template -->
+<div id="cart" class="bg-success ">
+    <img src="{% static 'shop/assets/icons/cart.svg' %}" alt="Cart Icon" width="42" height="42" role="img" style="filter:invert()">
+    <span id="cartQuantity" class="text-white fw-bold">0</span>
+    
+</div>
+<div class="alert alert-warning alert-dismissible d-none" id="cartBanner">Cart is empty<button type="button" class="btn-close close_alert_button"></button></div>
+
 <div class="col-12 col-sm-6 col-lg-4 col-xl-3 cartItem d-none">
     <div class="card grow" style="box-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.25);">
         <img src="{{ product.thumbnail.url }}" alt="" class="card-img-top cartItemThumbnail">
@@ -136,12 +190,13 @@
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title">Your cart</h5>
+            
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <div class="container-fluid p-0">
                 <div class="row g-4" id="cardModalBody">
-
+                    <div class="alert alert-danger d-none alert-dismissible" role="alert" id="cartAlert"><div id="cart_alert_text"></div><button type="button" class="btn-close close_alert_button"></button></div>
                 </div>
             </div>
           </div>

@@ -1,19 +1,15 @@
 from django import forms
-from shop.models import UserProfile
+from django.contrib.auth.models import User
+from shop.models import UserProfile, UserClass
 
-class ExportOrdersForm(forms.Form):
-    date_from = forms.DateField(label = "Почетна дата", widget=forms.widgets.DateInput(attrs={'type': 'date'}))
-    date_to = forms.DateField(label = "Крајна дата", widget=forms.widgets.DateInput(attrs={'type': 'date'}))
-    user_profile = forms.ChoiceField(widget=forms.Select)
 
-    def __init__(self, *args, **kwargs):
-        super(ExportOrdersForm, self).__init__(*args, **kwargs)
-        self.fields['user_profile'].choices = self.get_dynamic_choices()
+class Register_ApplicationForm(forms.Form):
+    business_name = forms.CharField(max_length=100, required=True)
+    city = forms.CharField(max_length=100, required=True)
+    contact_person = forms.CharField(max_length=100, required=True)
+    phone_number = forms.CharField(max_length=100, required=True)
+    email = forms.CharField(max_length=100, required=True)
+    address = forms.CharField(max_length=100, required=True)
 
-    def get_dynamic_choices(self):
-        choices = []
-        user_profiles = UserProfile.objects.all()
-        for profile in user_profiles:
-            choice = (profile.id, profile.business_name)
-            choices.append(choice)
-        return choices
+
+

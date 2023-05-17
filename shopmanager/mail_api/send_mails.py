@@ -86,7 +86,7 @@ def product_quantity_mail(product):
 
 
 def new_registerApplication_mail(application):
-    link_url = 'http://127.0.0.1:8000' + reverse('shopmanager:shopmanager-new-registrations')
+    link_url = 'http://127.0.0.1:8000' + reverse('shopmanager:shopmanager-home')
     created_at_formatted = application.created_at.strftime('%Y-%m-%d %H:%M:%S')
     message = Mail(
     from_email='thefrisb@gmail.com',

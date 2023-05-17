@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-
+{% csrf_token %}
     <div class="container-xxl">
         <div class="row p-2 my-3 row-cols-lg-6 row-cols-md-4 row-cols-sm-2 g-4 text-center">
             <div class="col-12 w-100 text-primary">
@@ -55,7 +55,7 @@
                 <h3>New registrations</h3>
             </div>
             {% for applicant in register_applications %}
-            <div class="col col-12 col-lg-6 col-xl-4">
+            <div class="col col-12 col-lg-6 col-xl-4 applicationHolder">
                 <div class="card">
                     <div class="card-body">
                         <div class="text-bold text-primary pb-3 fs-5 fw-bold">{{ applicant.business_name }}<div class=" fw-normal fs-6 font-italic">{{ applicant.created_at }}</div></div>
@@ -67,14 +67,17 @@
                         <div>{{ applicant.address }}</div>
                     </div>
                     <div class="card-footer d-flex justify-content-between">
-                        <button class="btn btn-sm btn-secondary">Dismiss</button>
-                        <button class="btn btn-sm btn-success">Approve</button>
+                        <button class="btn btn-sm btn-secondary dismiss-userBtn" data-registrant-id="{{ applicant.id }}">Dismiss</button>
+                        <a href="{{new_user_profile_url}}"class="btn btn-sm btn-success" target="_blank">Approve</a>
                     </div>
                     
 
                 </div>
             </div>
             {% endfor %}
+        </div>
+        <div class="col-12">
+            
         </div>
 
         

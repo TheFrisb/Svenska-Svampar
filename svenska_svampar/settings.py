@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'shopmanager.apps.ShopmanagerConfig',
     'wkhtmltopdf',
     'django_crontab',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [

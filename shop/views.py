@@ -15,7 +15,7 @@ def shop_home(request):
         user_profile = UserProfile.objects.get(user=request.user)
         user_class = user_profile.user_class
         print(user_profile.business_name)
-        products = Product.objects.all()
+        products = Product.objects.all().order_by('-created_at')
         product_prices = {}
         for product in products:
             try:
@@ -76,40 +76,54 @@ def create_order(request):
             cart_items = json.loads(request.POST.get('cartItems'))
             if not cart_items:
                 return JsonResponse({'error': 'Cart is empty.'}, status=400)
-            print(cart_items)
+           # print(cart_items)
             insufficient_stock_items = []
-            order = Order.objects.create(user=user, user_profile = user_profile)
-            order_total = 0
             for prod_id, quantity in cart_items.items():
                 product_id = int(prod_id)
                 quantity = int(quantity)
-
                 try:
                     product = Product.objects.get(id=product_id)
                 except Product.DoesNotExist:
                     return JsonResponse({'error': 'Product does not exist.'}, status=400)
                 
-                if quantity > product.stock:
+                if quantity > product.stock and product.stock > 0:
                     insufficient_stock_items.append(product_id)
                     
-                else:
+            
+            if insufficient_stock_items:
+                return JsonResponse({
+                    'error': 'Not enough stock for some items',
+                    'insufficient_stock_items': insufficient_stock_items
+                    }, status=400)
+            else:
+                order = Order.objects.create(user=user, user_profile = user_profile)
+                order_total = 0
+                created_products = []
+                for prod_id, quantity in cart_items.items():
+                    product = Product.objects.get(id=int(prod_id))
                     product_price = ProductPrice.objects.filter(product=product, user_class=user_class).values_list('price', flat=True).get()
                     order_total += product_price * quantity
                     OrderItem.objects.create(order=order, product=product, quantity=quantity,
                                               price_each = product_price, total_price = product_price * quantity)
                     product.stock -= quantity
                     product.save()
-            
-            if insufficient_stock_items:
-                order.delete()
-                return JsonResponse({
-                    'error': 'Not enough stock for some items',
-                    'insufficient_stock_items': insufficient_stock_items
-                    }, status=400)
-            else:
+                    product_dict = {
+                        'name': product.name,
+                        'quantity': quantity,
+                        'price': product_price,
+                        'total_price': product_price * quantity,
+                    }
+                    print(product_price)
+                    created_products.append(product_dict)
+                
                 order.total_price = order_total
                 order.save()
-                return JsonResponse({'message': 'Order created.'}, status=200)
+                return JsonResponse(
+                    {
+                    'message': 'Order created.',
+                    'products': created_products,
+                    'order_total': order_total,
+                    }, status=200)
                 
         else:
             return JsonResponse({'error': 'Not authenticated.'}, status=400)

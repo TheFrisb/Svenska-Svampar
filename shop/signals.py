@@ -8,11 +8,11 @@ from shopmanager.pdf_generation import generate_pdf
 from shopmanager.mail_api import send_mails
 
 
-@receiver(post_save, sender=Product)
-def product_quantity_mail(sender, instance, created, **kwargs):
-    if not created and instance.stock <= 50:
-        print('Product quantity mail signal')
-        mail_status = send_mails.product_quantity_mail(instance)
+# @receiver(post_save, sender=Product)
+# def product_quantity_mail(sender, instance, created, **kwargs):
+#     if not created and instance.stock <= 50:
+#         print('Product quantity mail signal')
+#         mail_status = send_mails.product_quantity_mail(instance)
 
 
 # @receiver(post_save, sender=Order)

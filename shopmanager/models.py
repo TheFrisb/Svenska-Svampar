@@ -4,20 +4,20 @@ from shop.models import Order, OrderItem
 
 
 class Register_Application(models.Model):
-    business_name = models.CharField(max_length=100, blank=True)
-    city = models.CharField(max_length=100, blank=True)
-    contact_person = models.CharField(max_length=100, blank=True)
-    phone_number = models.CharField(max_length=100, blank=True)
-    email = models.CharField(max_length=100, blank=True)
-    address = models.CharField(max_length=100, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
-    is_accepted = models.BooleanField(default=False)
-    is_dismissed = models.BooleanField(default=False)
-    is_mail_sent = models.BooleanField(default=False)
+    business_name = models.CharField(max_length=100, blank=True, verbose_name='Registrant Business Name')
+    city = models.CharField(max_length=100, blank=True, verbose_name='Registrant City')
+    contact_person = models.CharField(max_length=100, blank=True, verbose_name='Registrant Contact Person')
+    phone_number = models.CharField(max_length=100, blank=True, verbose_name='Registrant Phone Number')
+    email = models.CharField(max_length=100, blank=True, verbose_name='Registrant Email')
+    address = models.CharField(max_length=100, blank=True, verbose_name='Registrant Address')
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Registrant Application Date')
+    updated_at = models.DateTimeField(auto_now_add=True, verbose_name='Registrant Application Update Date')
+    is_accepted = models.BooleanField(default=False, verbose_name='Registrant Application Acceptance Status')
+    is_dismissed = models.BooleanField(default=False, verbose_name='Registrant Application Dismissal Status')
+    is_mail_sent = models.BooleanField(default=False, verbose_name='Registrant Application Mail Sent Status')
     
     def __str__(self):
-        return f'Registered applicant with business name: {self.business_name}'
+        return f'Application for: {self.business_name}'
     
 
     class Meta:
