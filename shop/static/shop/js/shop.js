@@ -2,7 +2,39 @@
 //                  Process the error response
 //                 $("#response").html(xhr.responseText);
 //               }
+function flyProductThumbnailToCart(productCard, cartIcon, cartQuantityHolder){
 
+    // fly thumbnailToFly to cartIcon
+    $(productCard).clone().css({
+        'opacity': '1',
+        'position': 'absolute',
+        'z-index': '11100',
+        'box-shadow': '0 0 30px #999999, 0 10px 20px #999999',
+        'width': productCard.width(),
+        'height': productCard.height(),
+        'top': $(productCard).offset().top,
+        'left': $(productCard).offset().left
+    }).appendTo("body").animate({
+        top: $(cartIcon).offset().top,
+        left: $(cartIcon).offset().left,
+        width: 20,
+        height: 20
+    }, 300, 'linear', function() {
+        $(this).remove();
+        $(cartIcon).addClass("cartIconTransform");
+        $(cartQuantityHolder).addClass("cartQuantityTransform");
+        setTimeout(function(){
+            $(cartIcon).removeClass("cartIconTransform");
+            $(cartQuantityHolder).removeClass("cartQuantityTransform");
+        }, 300);
+    });
+
+        return;
+    }
+
+
+
+  
 function generateCartItem(cartItem, product_id, product_name, product_sku, price_per_unit, price, quantity, thumbnail){
     $(cartItem).attr("data-product-id", product_id);
     $(cartItem).find(".cartItemThumbnail").attr("src", thumbnail);
@@ -52,6 +84,7 @@ $(document).ready(function(){
     let loginModal = $("#loginModal");
     let registerModal = $("#registerModal");
     let wrongLoginInformation = $("#wrongLoginInformation");
+    let cartIcon = $("#cart");
     let cartModal = $("#cartModal");
     let cartModalBody = $("#cardModalBody");
     let alert = $("#alert");
@@ -283,6 +316,15 @@ $(document).ready(function(){
         let price = parseInt($(parentCard).find(".card-productPrice").text());
         let quantity = parseInt($(parentCard).find(".product_quantity").val());
         let product_id = parseInt($(this).data("product-id"));
+        
+        
+        
+
+
+
+
+        
+
 
         $.ajax({
             url: 'check-product-quantity/',
@@ -294,6 +336,17 @@ $(document).ready(function(){
             },
             dataType: 'json',
             success: function(data){
+                // add border-2 and border-success to parent card and remove after 1 second
+                $(parentCard).addClass("border-2 border-success");
+                    setTimeout(function(){
+                        $(parentCard).removeClass("border-2 border-success");
+                }, 700);
+                    
+
+                
+
+                let productCardToFly = $(parentCard).closest(".col-12");
+                flyProductThumbnailToCart(productCardToFly, cartIcon, cartQuantityHolder);
                 existing_cart_items = $(cartModalBody).find(".cartItem");
                 // check if id is existing
                 for(let i = 0; i < existing_cart_items.length; i++){

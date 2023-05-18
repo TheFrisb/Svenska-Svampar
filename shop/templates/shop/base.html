@@ -31,6 +31,9 @@
         .grow:hover { 
         transform: scale(1.02); 
         }
+        .product-card{
+            transition: all .2s ease-in-out; 
+        }
         #cart{
             width:90px; 
             height:90px; 
@@ -45,6 +48,7 @@
             align-items: center;
             z-index: 1000;
             transition: all .2s ease-in-out; 
+
         }
 
         #cart:hover{
@@ -62,6 +66,7 @@
             justify-content: center;
             align-items: center;
             background-color: #870033!important;
+            transition: all .2s ease-in-out;
             
         }
         #cartBanner{
@@ -70,6 +75,12 @@
             right: 5%;
             width: 220px;
             
+        }
+        .cartIconTransform{
+            transform: scale(1.2);
+        }
+        .cartQuantityTransform{
+            transform: scale(1.4)
         }
 
         @keyframes growAlert{
