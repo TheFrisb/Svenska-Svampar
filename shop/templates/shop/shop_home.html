@@ -34,8 +34,10 @@
                                 Stock: {{ product.stock }}
                                 {% endif %}
                             {% endif %}
-                            <br>
-                            Pris: <span class="card-pricePerUnit">123</span>
+                            {% if user_profile %}
+                                <br>
+                                Pris: <span class="card-pricePerUnit">123</span>
+                            {% endif %}
                         </p>
                     </div>
                     {% if price.price %}
