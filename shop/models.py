@@ -43,7 +43,7 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
     mail_status = models.BooleanField(default=True)
-    sku = models.CharField(max_length=100, blank=True, null=True, verbose_name='SKU')
+    sku = models.CharField(max_length=100, blank=True, null=True, verbose_name='Article Number')
     ean_code = models.CharField(max_length=100, blank=True, null=True, verbose_name='EAN Code')
     def __str__(self):
         return f'{self.name} - {self.stock} stock'
