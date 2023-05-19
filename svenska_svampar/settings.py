@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-y9akfc##_z13srq0)l$l07d2n&4wz*0)03q&h$lh0%a=4ctf(5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['www.svenskasvampar.se', 'svenskasvampar.se', '161.35.22.45', 'localhost']
+ALLOWED_HOSTS = ['www.svenskasvampar.se', 'svenskasvampar.se', '161.35.22.45']
 
 # WKHTMLTOPDF_CMD = 'C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe'
 
@@ -185,9 +185,10 @@ USE_TZ = True
 # LOGOUT_REDIRECT_URL = 'shop:shop-home'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-
-STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
