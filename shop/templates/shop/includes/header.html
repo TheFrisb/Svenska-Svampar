@@ -18,7 +18,7 @@
                     <a href="{% url 'shopmanager:shopmanager-home' %}#new_registrations" class="nav-link" style="position:relative">New Registrations<span style="position:relative;bottom:5px;left:2px;font-weight:600;" class="text-warning">{{ new_registrations_count }}</span></a>
                     <a href="{% url 'shopmanager:shopmanager-view-orders' pk=0 %}" class="nav-link">View Orders</a>
                 {% endif %}
-                <a href="#" class="nav-link">About us</a>
+                <!-- <a href="#" class="nav-link">About us</a> !-->
             </div>
             <div class="navbar-nav">
                 {% if not user_profile %}    
