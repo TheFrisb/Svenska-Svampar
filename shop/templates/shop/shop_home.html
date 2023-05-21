@@ -1,5 +1,6 @@
 {% extends 'shop/base.html' %}
 {% load static %}
+{% load math_filters %}
 {% block content %}
 {% csrf_token %}
 <div class="container-xxl py-4">
@@ -34,9 +35,9 @@
                                 Stock: {{ product.stock }}
                                 {% endif %}
                             {% endif %}
-                            {% if user_profile %}
+                            {% if user_profile  and price.price %}
                                 <br>
-                                Pris: <span class="card-pricePerUnit">123</span>
+                                Pris: <span class="card-pricePerUnit">{{ price.price|divide:product.quantity_shipped }}</span>
                             {% endif %}
                         </p>
                     </div>

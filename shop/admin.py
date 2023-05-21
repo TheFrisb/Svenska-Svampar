@@ -34,7 +34,19 @@ class OrderAdmin(admin.ModelAdmin):
     inlines = [OrderItemsInline]
 
 
-admin.site.register(UserProfile)
-admin.site.register(Product)
+
+
+class ProductAdmin(admin.ModelAdmin):
+    exclude = ('mail_status', )
+    list_display = ('name', 'stock','sku', 'ean_code', 'created_at', 'updated_at', )
+
+
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'user_class', 'created_at', 'updated_at',)
+
+
+
+admin.site.register(UserProfile, UserProfileAdmin)
+admin.site.register(Product, ProductAdmin)
 admin.site.register(UserClass, UserClassAdmin)
 admin.site.register(Order, OrderAdmin)
