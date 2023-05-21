@@ -8,21 +8,21 @@ import logging
 import requests
 from shop.models import Order, Product
 from shopmanager.models import Register_Application
-
-
+from decouple import config
 logger = logging.getLogger('shopmanager')
 
 
 def get_admin_url_for_object(obj):
     content_type = ContentType.objects.get_for_model(obj)
     admin_url = reverse('admin:%s_%s_change' % (content_type.app_label, content_type.model), args=(obj.id,))
-    return 'http://127.0.0.1:8000' + admin_url
+    return 'https://svenskasvampar.se' + admin_url
+
 
 
 def new_order_mail(order, pdf_path):
     message = Mail(
             from_email='thefrisb@gmail.com',
-            to_emails='bedzovski@yahoo.com',
+            to_emails='svenskasvampar@yahoo.com',
             subject=f'New Order from {order.user_profile.business_name} - {order.created_at.strftime("%d/%m/%Y %H:%M:%S")}',
             html_content = f'<p>Order invoice is as attachment</p><br>'
         )
@@ -39,7 +39,7 @@ def new_order_mail(order, pdf_path):
     message.attachment = attachedFile
 
     try:
-        sg = SendGridAPIClient('')
+        sg = SendGridAPIClient(config('MAIL_SECRET_KEY'))
         response = sg.send(message)
         print(response.status_code)
         print(response.body)
@@ -53,11 +53,13 @@ def new_order_mail(order, pdf_path):
         return False
 
 
+
+
 def product_quantity_mail(product):
     if product.stock <= 50 and product.stock > 0:
         message = Mail(
             from_email='thefrisb@gmail.com',
-            to_emails='bedzovski@yahoo.com',
+            to_emails='svenskasvampar@yahoo.com',
             subject=f'[WARNING] Product {product.name} has {product.stock} stock left',
             html_content = f'<p>Product <strong>{product.name}</strong> has <strong style="text-decoration:underline">{product.stock} stock left</strong></p><br>\
                             <a href="{get_admin_url_for_object(product)}" target="_blank" style="text-decoration: none;background: blue;font-weight: 600;padding: 5px 10px;border-radius: 4px;color: white;">Update stock</a>'
@@ -66,14 +68,14 @@ def product_quantity_mail(product):
     elif product.stock == 0:
         message = Mail(
             from_email='thefrisb@gmail.com',
-            to_emails='bedzovski@yahoo.com',
+            to_emails='svenskasvampar@yahoo.com',
             subject=f'[OUT OF STOCK] Product {product.name} is out of stock!',
             html_content = f'<p>Product <strong>{product.name}</strong> is <strong style="text-decoration:underline">out of stock</strong></p><br>\
                             <a href="{get_admin_url_for_object(product)}" target="_blank" style="text-decoration: none;background: blue;font-weight: 600;padding: 5px 10px;border-radius: 4px;color: white;">Update stock</a>'
 
         )
     try:
-        sg = SendGridAPIClient('')
+        sg = SendGridAPIClient(config('MAIL_SECRET_KEY'))
         response = sg.send(message)
         Product.objects.filter(id=product.id).update(mail_status=True)
         return True
@@ -90,7 +92,7 @@ def new_registerApplication_mail(application):
     created_at_formatted = application.created_at.strftime('%Y-%m-%d %H:%M:%S')
     message = Mail(
     from_email='thefrisb@gmail.com',
-    to_emails='bedzovski@yahoo.com',
+    to_emails='svenskasvampar@yahoo.com',
     subject=f'New register application from {application.business_name}',
     html_content = f'<p>New application ({created_at_formatted})</p> \
                     <p>Name: <strong>{application.business_name}</strong></p> \
@@ -102,7 +104,7 @@ def new_registerApplication_mail(application):
                     <a href="{link_url}" target="_blank" style="text-decoration: none;background: blue;font-weight: 600;padding: 5px 10px;border-radius: 4px;color: white;">Check application</a>'
     )
     try:
-        sg = SendGridAPIClient('')
+        sg = SendGridAPIClient(config('MAIL_SECRET_KEY'))
         response = sg.send(message)
         Register_Application.objects.filter(id=application.id).update(is_mail_sent=True)
         return True
@@ -110,3 +112,30 @@ def new_registerApplication_mail(application):
         logger.exception(f'Error sending email for new application - {application.id} - {application.business_name} - {application.created_at.strftime("%d/%m/%Y %H:%M:%S")} {str(e)}')
         Register_Application.objects.filter(id=application.id).update(is_mail_sent=False)
         return False
+    
+
+
+def insufficient_stock_mail(user_profile, email_insufficient_stock_items):
+    business_name = user_profile.business_name
+    html_content = f'<p>{business_name}, tried to order the following items, but they are out of stock:</p><br>'
+    for item in email_insufficient_stock_items:
+        html_content += f'<p><strong>{item["name"]}</strong> - x{item["quantity"]}, but we have only {item["stock_left"]} on stock</p><br>'
+        html_content += f'<p>{user_profile.contact_person}</p><br>'
+        html_content += f'<a href="tel:{user_profile.phone_number}" class="style="text-decoration: none;background: blue;font-weight: 600;padding: 5px 10px;border-radius: 4px;color: white;">{user_profile.phone_number}</a><br>'
+
+    message = Mail(
+        from_email='thefrisb@gmail.com',
+        to_emails='svenskasvampar@yahoo.com',
+        subject=f'[INFO] Failed order from {business_name} - insufficient stock',
+        html_content = html_content
+    )
+    
+    try:
+        sg = SendGridAPIClient(config('MAIL_SECRET_KEY'))
+        response = sg.send(message)
+        return True
+    except Exception as e:
+        logger.exception(f'Error sending email for insufficient stock - {user_profile.id} - {user_profile.business_name} - {user_profile.created_at.strftime("%d/%m/%Y %H:%M:%S")} {str(e)}')
+        return False
+    
+

@@ -15,9 +15,9 @@ from shopmanager.mail_api import send_mails
 #         mail_status = send_mails.product_quantity_mail(instance)
 
 
-# @receiver(post_save, sender=Order)
-# def new_order_mailing(sender, instance, created, **kwargs):
-#     if created:
-#         pdf_path = generate_pdf.export_orders_as_pdf()
-#         mail_status = send_mails.new_order_mail(instance, pdf_path)
+@receiver(post_save, sender=Order)
+def new_order_mailing(sender, instance, created, **kwargs):
+    if created:
+        pdf_path = generate_pdf.export_orders_as_pdf()
+        mail_status = send_mails.new_order_mail(instance, pdf_path)
 
