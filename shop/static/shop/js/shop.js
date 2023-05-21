@@ -423,7 +423,7 @@ $(document).ready(function(){
                     let product = products[i];
                     new_order_html += "<strong>" + product.name + " - " + product.quantity + " x " + product.price + " = " + product.total_price + "</strong><br>";
                 }
-                new_order_html += "<br><strong>Total: " + data.order_total + "</strong>";
+                new_order_html += "<br><strong class='fs-5'>Total: " + data.order_total + "$</strong>";
 
 
                 $(cartModal).modal("hide");
@@ -469,7 +469,7 @@ $(document).ready(function(){
                     $(cartModal).modal("hide");
                     alert_remove_classes(alert);
                     alert.addClass("alert-danger");
-                    alert_text.text('The following product were removed from your cart due to not enough stock: ' + error_product_names + '. You can stil purchase the other ones!. We will contact you shortly!');
+                    alert_text.html('<span>The following product were removed from your cart due to not enough stock: <span class="fw-bold">' + error_product_names + '</span> . You can still purchase the other ones! We will contact you shortly!</span>');
                     alert.removeClass("d-none");
                     $('html, body').animate({scrollTop:0}, 'slow', function(){
                         if(alert.hasClass("growAlert")){

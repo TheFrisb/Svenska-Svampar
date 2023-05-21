@@ -2246,3 +2246,201 @@ Traceback (most recent call last):
                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 FileNotFoundError: [WinError 2] The system cannot find the file specified
 (2023-05-21 02:11:18,120), [WARNING], django.request, Not Found: /favicon.ico
+(2023-05-21 02:31:46,913), [WARNING], django.request, Not Found: /favicon.ico
+(2023-05-21 02:39:39,724), [ERROR], django.request, Internal Server Error: /create-order/
+Traceback (most recent call last):
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\OneDrive\Desktop\website\shop\views.py", line 99, in create_order
+    order = Order.objects.create(user=user, user_profile = user_profile)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\db\models\query.py", line 658, in create
+    obj.save(force_insert=True, using=self.db)
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\db\models\base.py", line 814, in save
+    self.save_base(
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\db\models\base.py", line 892, in save_base
+    post_save.send(
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\dispatch\dispatcher.py", line 176, in send
+    return [
+           ^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\dispatch\dispatcher.py", line 177, in <listcomp>
+    (receiver, receiver(signal=self, sender=sender, **named))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\OneDrive\Desktop\website\shop\signals.py", line 22, in new_order_mailing
+    mail_status = send_mails.new_order_mail(instance, pdf_path)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\OneDrive\Desktop\website\shopmanager\mail_api\send_mails.py", line 39, in new_order_mail
+    attachment = MessageAttachment(
+                 ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\ElasticEmail\model_utils.py", line 49, in wrapped_init
+    return fn(_self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: MessageAttachment.__init__() missing 2 required positional arguments: 'binary_content' and 'name'
+(2023-05-21 18:55:56,190), [WARNING], django.request, Not Found: /favicon.ico
+(2023-05-21 18:57:13,919), [WARNING], django.request, Not Found: /favicon.ico
+(2023-05-21 18:57:28,416), [WARNING], django.request, Not Found: /favicon.ico
+(2023-05-21 18:57:35,684), [WARNING], django.request, Not Found: /favicon.ico
+(2023-05-21 18:57:43,560), [WARNING], django.request, Not Found: /favicon.ico
+(2023-05-21 18:58:06,359), [WARNING], django.request, Not Found: /favicon.ico
+(2023-05-21 18:58:13,336), [WARNING], django.request, Not Found: /favicon.ico
+(2023-05-21 18:58:25,300), [WARNING], django.request, Not Found: /favicon.ico
+(2023-05-21 18:59:47,973), [WARNING], django.request, Not Found: /favicon.ico
+(2023-05-21 18:59:59,108), [ERROR], shopmanager, Error sending email for order 10 - Business name - 21/05/2023 16:59:55 HTTP Error 401: Unauthorized
+Traceback (most recent call last):
+  File "C:\Users\bedzo\OneDrive\Desktop\website\shopmanager\mail_api\send_mails.py", line 43, in new_order_mail
+    response = sg.send(message)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\sendgrid\base_interface.py", line 62, in send
+    return self.client.mail.send.post(request_body=message)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\python_http_client\client.py", line 277, in http_request
+    self._make_request(opener, request, timeout=timeout)
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\python_http_client\client.py", line 184, in _make_request
+    raise exc
+python_http_client.exceptions.UnauthorizedError: HTTP Error 401: Unauthorized
+(2023-05-21 18:59:59,108), [ERROR], shopmanager, Error sending email for order 10 - Business name - 21/05/2023 16:59:55 HTTP Error 401: Unauthorized
+Traceback (most recent call last):
+  File "C:\Users\bedzo\OneDrive\Desktop\website\shopmanager\mail_api\send_mails.py", line 43, in new_order_mail
+    response = sg.send(message)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\sendgrid\base_interface.py", line 62, in send
+    return self.client.mail.send.post(request_body=message)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\python_http_client\client.py", line 277, in http_request
+    self._make_request(opener, request, timeout=timeout)
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\python_http_client\client.py", line 184, in _make_request
+    raise exc
+python_http_client.exceptions.UnauthorizedError: HTTP Error 401: Unauthorized
+(2023-05-21 19:00:56,352), [WARNING], django.request, Not Found: /favicon.ico
+(2023-05-21 19:01:00,930), [ERROR], shopmanager, Error sending email for order 11 - Business name - 21/05/2023 17:00:58 HTTP Error 401: Unauthorized
+Traceback (most recent call last):
+  File "C:\Users\bedzo\OneDrive\Desktop\website\shopmanager\mail_api\send_mails.py", line 43, in new_order_mail
+    response = sg.send(message)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\sendgrid\base_interface.py", line 62, in send
+    return self.client.mail.send.post(request_body=message)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\python_http_client\client.py", line 277, in http_request
+    self._make_request(opener, request, timeout=timeout)
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\python_http_client\client.py", line 184, in _make_request
+    raise exc
+python_http_client.exceptions.UnauthorizedError: HTTP Error 401: Unauthorized
+(2023-05-21 19:01:00,930), [ERROR], shopmanager, Error sending email for order 11 - Business name - 21/05/2023 17:00:58 HTTP Error 401: Unauthorized
+Traceback (most recent call last):
+  File "C:\Users\bedzo\OneDrive\Desktop\website\shopmanager\mail_api\send_mails.py", line 43, in new_order_mail
+    response = sg.send(message)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\sendgrid\base_interface.py", line 62, in send
+    return self.client.mail.send.post(request_body=message)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\python_http_client\client.py", line 277, in http_request
+    self._make_request(opener, request, timeout=timeout)
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\python_http_client\client.py", line 184, in _make_request
+    raise exc
+python_http_client.exceptions.UnauthorizedError: HTTP Error 401: Unauthorized
+(2023-05-21 19:01:09,598), [WARNING], django.request, Not Found: /favicon.ico
+(2023-05-21 19:09:22,904), [ERROR], django.request, Internal Server Error: /create-order/
+Traceback (most recent call last):
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\OneDrive\Desktop\website\shop\views.py", line 100, in create_order
+    send_mails.insufficient_stock_mail(user_profile, email_insufficient_stock_items)
+  File "C:\Users\bedzo\OneDrive\Desktop\website\shopmanager\mail_api\send_mails.py", line 122, in insufficient_stock_mail
+    html_content += f'<p><strong>{item["name"]}</strong> - x{item["quantity"]}, but we have only {item["stock_left"]} on stock</p><br>'
+                                                                                                  ~~~~^^^^^^^^^^^^^^
+KeyError: 'stock_left'
+(2023-05-21 19:09:30,306), [ERROR], shopmanager, Error sending email for insufficient stock - 1 - Business name - 20/05/2023 23:57:35 HTTP Error 401: Unauthorized
+Traceback (most recent call last):
+  File "C:\Users\bedzo\OneDrive\Desktop\website\shopmanager\mail_api\send_mails.py", line 135, in insufficient_stock_mail
+    response = sg.send(message)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\sendgrid\base_interface.py", line 62, in send
+    return self.client.mail.send.post(request_body=message)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\python_http_client\client.py", line 277, in http_request
+    self._make_request(opener, request, timeout=timeout)
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\python_http_client\client.py", line 184, in _make_request
+    raise exc
+python_http_client.exceptions.UnauthorizedError: HTTP Error 401: Unauthorized
+(2023-05-21 19:09:30,306), [ERROR], shopmanager, Error sending email for insufficient stock - 1 - Business name - 20/05/2023 23:57:35 HTTP Error 401: Unauthorized
+Traceback (most recent call last):
+  File "C:\Users\bedzo\OneDrive\Desktop\website\shopmanager\mail_api\send_mails.py", line 135, in insufficient_stock_mail
+    response = sg.send(message)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\sendgrid\base_interface.py", line 62, in send
+    return self.client.mail.send.post(request_body=message)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\python_http_client\client.py", line 277, in http_request
+    self._make_request(opener, request, timeout=timeout)
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\python_http_client\client.py", line 184, in _make_request
+    raise exc
+python_http_client.exceptions.UnauthorizedError: HTTP Error 401: Unauthorized
+(2023-05-21 19:09:30,309), [WARNING], django.request, Bad Request: /create-order/
+(2023-05-21 19:11:40,276), [WARNING], django.request, Not Found: /favicon.ico
+(2023-05-21 19:11:44,078), [ERROR], shopmanager, Error sending email for insufficient stock - 1 - Business name - 20/05/2023 23:57:35 HTTP Error 401: Unauthorized
+Traceback (most recent call last):
+  File "C:\Users\bedzo\OneDrive\Desktop\website\shopmanager\mail_api\send_mails.py", line 135, in insufficient_stock_mail
+    response = sg.send(message)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\sendgrid\base_interface.py", line 62, in send
+    return self.client.mail.send.post(request_body=message)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\python_http_client\client.py", line 277, in http_request
+    self._make_request(opener, request, timeout=timeout)
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\python_http_client\client.py", line 184, in _make_request
+    raise exc
+python_http_client.exceptions.UnauthorizedError: HTTP Error 401: Unauthorized
+(2023-05-21 19:11:44,078), [ERROR], shopmanager, Error sending email for insufficient stock - 1 - Business name - 20/05/2023 23:57:35 HTTP Error 401: Unauthorized
+Traceback (most recent call last):
+  File "C:\Users\bedzo\OneDrive\Desktop\website\shopmanager\mail_api\send_mails.py", line 135, in insufficient_stock_mail
+    response = sg.send(message)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\sendgrid\base_interface.py", line 62, in send
+    return self.client.mail.send.post(request_body=message)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\python_http_client\client.py", line 277, in http_request
+    self._make_request(opener, request, timeout=timeout)
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\python_http_client\client.py", line 184, in _make_request
+    raise exc
+python_http_client.exceptions.UnauthorizedError: HTTP Error 401: Unauthorized
+(2023-05-21 19:11:44,080), [WARNING], django.request, Bad Request: /create-order/
+(2023-05-21 19:11:56,913), [WARNING], django.request, Not Found: /favicon.ico
+(2023-05-21 19:12:00,955), [ERROR], shopmanager, Error sending email for insufficient stock - 1 - Business name - 20/05/2023 23:57:35 HTTP Error 401: Unauthorized
+Traceback (most recent call last):
+  File "C:\Users\bedzo\OneDrive\Desktop\website\shopmanager\mail_api\send_mails.py", line 135, in insufficient_stock_mail
+    response = sg.send(message)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\sendgrid\base_interface.py", line 62, in send
+    return self.client.mail.send.post(request_body=message)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\python_http_client\client.py", line 277, in http_request
+    self._make_request(opener, request, timeout=timeout)
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\python_http_client\client.py", line 184, in _make_request
+    raise exc
+python_http_client.exceptions.UnauthorizedError: HTTP Error 401: Unauthorized
+(2023-05-21 19:12:00,955), [ERROR], shopmanager, Error sending email for insufficient stock - 1 - Business name - 20/05/2023 23:57:35 HTTP Error 401: Unauthorized
+Traceback (most recent call last):
+  File "C:\Users\bedzo\OneDrive\Desktop\website\shopmanager\mail_api\send_mails.py", line 135, in insufficient_stock_mail
+    response = sg.send(message)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\sendgrid\base_interface.py", line 62, in send
+    return self.client.mail.send.post(request_body=message)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\python_http_client\client.py", line 277, in http_request
+    self._make_request(opener, request, timeout=timeout)
+  File "C:\Users\bedzo\AppData\Local\Programs\Python\Python311\Lib\site-packages\python_http_client\client.py", line 184, in _make_request
+    raise exc
+python_http_client.exceptions.UnauthorizedError: HTTP Error 401: Unauthorized
+(2023-05-21 19:12:00,960), [WARNING], django.request, Bad Request: /create-order/
+(2023-05-21 19:12:19,150), [WARNING], django.request, Not Found: /favicon.ico

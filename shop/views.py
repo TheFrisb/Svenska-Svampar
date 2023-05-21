@@ -5,7 +5,7 @@ import json
 from shop.models import *
 from shopmanager.models import Register_Application
 from django.contrib.auth import authenticate, login
-
+from shopmanager.mail_api import send_mails
 # Create your views here.
 
 logger = logging.getLogger('shop')
@@ -78,6 +78,7 @@ def create_order(request):
                 return JsonResponse({'error': 'Cart is empty.'}, status=400)
            # print(cart_items)
             insufficient_stock_items = []
+            email_insufficient_stock_items = []
             for prod_id, quantity in cart_items.items():
                 product_id = int(prod_id)
                 quantity = int(quantity)
@@ -88,9 +89,16 @@ def create_order(request):
                 
                 if quantity > product.stock and product.stock > 0:
                     insufficient_stock_items.append(product_id)
+                    invalid_product_dict = {
+                        'name': product.name,
+                        'quantity': quantity,
+                        'stock_left': product.stock,
+                    }
+                    email_insufficient_stock_items.append(invalid_product_dict)
                     
             
             if insufficient_stock_items:
+                send_mails.insufficient_stock_mail(user_profile, email_insufficient_stock_items)
                 return JsonResponse({
                     'error': 'Not enough stock for some items',
                     'insufficient_stock_items': insufficient_stock_items
