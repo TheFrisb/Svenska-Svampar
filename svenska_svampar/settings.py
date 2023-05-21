@@ -26,9 +26,9 @@ SECRET_KEY = 'django-insecure-y9akfc##_z13srq0)l$l07d2n&4wz*0)03q&h$lh0%a=4ctf(5
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['www.svenskasvampar.se', 'svenskasvampar.se', '161.35.22.45']
 
-WKHTMLTOPDF_CMD = 'C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe'
+#WKHTMLTOPDF_CMD = 'C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe'
 
 
 # Application definition
@@ -131,13 +131,14 @@ logger = logging.getLogger(__name__)
 WSGI_APPLICATION = 'svenska_svampar.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'mydatabase', # This is where you put the name of the db file. 
-                 # If one doesn't exist, it will be created at migration time.
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'svenska_svampar',
+        'USER': 'svenska_svampar_user',
+        'PASSWORD': 'svenksa_svampar_db_mainUser123',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
