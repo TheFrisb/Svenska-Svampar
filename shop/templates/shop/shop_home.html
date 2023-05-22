@@ -43,7 +43,7 @@
                     </div>
                     {% if price.price %}
                         
-                        <div class="card-text fw-semibold fs-5 text-danger pt-2">Price per unit <span class="card-productPrice">{{ price.price }}</span>$</div>
+                        <div class="card-text fw-semibold fs-5 text-danger pt-2">Price per unit <span class="card-productPrice">{{ price.price }}</span>$ excl. VAT</div>
                         {% if product.stock > 0 %}
                             <div class="input-group my-3  rounded w-50 mx-auto quantityContainer">
                                 <button class="btn btn-sm w-25 btn-outline-success quantityBtn quantityMinus" type="button" >-</button>
@@ -80,9 +80,9 @@
     </div>
 </div>
   
-  <!-- Login modal -->
-{% if not user_profile %}
 
+{% if not user_profile %}
+<!-- Login modal -->
     <div class="modal fade " id="loginModal" tabindex="-1" aria-labelledby="loginModal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border border-2 border-primary">
@@ -112,6 +112,8 @@
         </div>
         </div>
     </div>
+
+<!-- Register modal -->
     <div class="modal fade " id="registerModal" tabindex="-1" aria-labelledby="registerModal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border border-2 border-primary">
@@ -126,28 +128,61 @@
                 </div>
                 
                 <div class="m-2">
-                    <label for="business_name" class="form-label">Business name</label>
+                    <label for="business_name" class="form-label">Business name <span class="fw-bold text-danger">*</span></label>
                     <input type="text" class="form-control" name="business_name" id="registrant_business_name">
                 </div>
                 <div class="m-2">
-                    <label for="city" class="form-label">City</label>
+                    <label for="city" class="form-label">City <span class="fw-bold text-danger">*</span></label>
                     <input type="text" class="form-control" name="city" id="registrant_city">
                 </div>
                 <div class="m-2">
-                    <label for="address" class="form-label">Address</label>
+                    <label for="address" class="form-label">Address <span class="fw-bold text-danger">*</span></label>
                     <input type="text" class="form-control" name="address" id="registrant_address">
                 </div>
                 <div class="m-2">
-                    <label for="contact_person" class="form-label">Contact person</label>
+                    <label for="contact_person" class="form-label">Contact person <span class="fw-bold text-danger">*</span></label>
                     <input type="text" class="form-control" name="contact_person" id="registrant_contact_person">
                 </div>
                 <div class="m-2">
-                    <label for="email" class="form-label">Email</label>
+                    <label for="email" class="form-label">Email <span class="fw-bold text-danger">*</span></label>
                     <input type="email" class="form-control" name="email" id="registrant_email">
                 </div>
                 <div class="m-2">
-                    <label for="phone_number" class="form-label">Phone number</label>
+                    <label for="phone_number" class="form-label">Phone number <span class="fw-bold text-danger">*</span></label>
                     <input type="text" class="form-control" name="phone_number" id="registrant_phone_number">
+                </div>
+                <div class="m-2">
+                    <label for="business_type" class="form-label">Select your business type <span class="fw-bold text-danger">*</span></label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="registrant_business_type" id="registrant_business_type_wholesale" value="wholesale">
+                        <label class="form-check-label" for="business_type_wholesale">
+                          Wholesale
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="registrant_business_type" id="registrant_business_type_restaurant" value="restaurant">
+                        <label class="form-check-label" for="business_type_restaurant">
+                          Restaurant
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="registrant_business_type" id="registrant_business_type_marketstand" value="marketstand">
+                        <label class="form-check-label" for="business_type_marketstand">
+                          Market stand
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="registrant_business_type" id="registrant_business_type_other" value="other">
+                        <label class="form-check-label" for="business_type_other">
+                          Other
+                        </label>
+                    </div>
+                </div>
+                <div class="m-2">
+                    <div class="form-floating">
+                        <textarea class="form-control" placeholder="Leave a comment here" id="registrant_comment" style="height: 100px"></textarea>
+                        <label for="registrant_comment">If you have a note, specify here</label>
+                      </div>
                 </div>
                 <div class="m-2 mt-4">
                     <button class="btn btn-primary w-100" id="registerBtn">Register</button>
