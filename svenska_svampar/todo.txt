@@ -1,6 +1,34 @@
-1. Stylize
+
+2. fix decouple config
+
+3. Total price bez danok + display so danok
+4. Add za admin all prices for item
+
+5. Fix pdf
+- Phone gore desno ne
+- mail da
+- Faktura i ocr broj od 10 do 100
+- Kurndr user id
+- Contact person
+- add field vat nummer i organizaciski broj
+- Forfallodatum +10 dena limit
+- Drojsmalaranta 8% fakticki kolko poveke treba
+- Leveransdatum den na delivery
+- Vart ordernr fakturanr povrzani se zaedno, taa faktura e izdadena za taj broj
+- exkl moms 150 + 12%
+
+
+6. Register_Application
+- validate frontend
+- handle backend
+- show in shopmanager
 
 
 
+8. Reorganize admin
+9. Tidy up Code
+10. Check shopmanager
 
-10. Vij so mails
+
+
+10. Sredi mails + za order fail mail-o
