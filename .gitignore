@@ -1,1 +1,5 @@
-svenska_svampar/settings.py
+**/migrations/
+**/settings.py
+**/wsgi.py
+*.env
+*.log
