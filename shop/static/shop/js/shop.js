@@ -156,26 +156,134 @@ $(document).ready(function(){
         }
     });
     $(document).on("click", "#registerBtn", function(e){
+        let form_is_valid = true;
         let business_name = $("#registrant_business_name").val();
         let city = $("#registrant_city").val();
         let address = $("#registrant_address").val();
         let contact_person = $("#registrant_contact_person").val();
         let email = $("#registrant_email").val();
         let phone_number = $("#registrant_phone_number").val();
+        let business_type = $("input[name='registrant_business_type']:checked").val();
+        let registration_note = $("#registrant_comment").val();
 
-        if(business_name.trim() === "" || city.trim() === "" || address.trim() === "" || contact_person.trim() === "" || email.trim() === "" || phone_number.trim() === ""){
-            $("#invalidRegisterForm").html("Please fill all fields").removeClass("d-none");
-            // scroll modal to top
-            $(registerModal).animate({ scrollTop: 0 }, "slow");
-            return;
+        let first_invalid_input = null;
+        if(business_name.trim() === ""){
+            form_is_valid = false;
+            $("#registrant_business_name").addClass("border-danger").focus();
+
+            first_invalid_input = $("#registrant_business_name");
         }
-        if(email.includes("@") === false){
+        else{
+            $("#registrant_business_name").removeClass("border-danger");
+        }
+
+        if(city.trim() === ""){
+            form_is_valid = false;
+            $("#registrant_city").addClass("border-danger").focus();
+
+            if(first_invalid_input === null){
+                first_invalid_input = $("#registrant_city");
+            }
+        }
+        else{
+            $("#registrant_city").removeClass("border-danger");
+        }
+
+        if(address.trim() === ""){
+            form_is_valid = false;
+            $("#registrant_address").addClass("border-danger").focus();
+
+            if(first_invalid_input === null){
+                first_invalid_input = $("#registrant_address");
+            }
+        }
+        else{
+            $("#registrant_address").removeClass("border-danger");
+        }
+
+        if(contact_person.trim() === ""){
+            form_is_valid = false;
+            $("#registrant_contact_person").addClass("border-danger").focus();
+
+            if(first_invalid_input === null){
+                first_invalid_input = $("#registrant_contact_person");
+            }
+        }
+        else{
+            $("#registrant_contact_person").removeClass("border-danger");
+        }
+
+        if(phone_number.trim() === ""){
+            form_is_valid = false;
+            $("#registrant_phone_number").addClass("border-danger").focus();
+
+            if(first_invalid_input === null){
+                first_invalid_input = $("#registrant_phone_number");
+            }
+
+        }
+        else{
+            $("#registrant_phone_number").removeClass("border-danger");
+        }
+
+        if(business_type === undefined){
+            form_is_valid = false;
+            $("#registrant_select_business_typeLabel").addClass("text-danger");
+
+            if(first_invalid_input === null){
+                first_invalid_input = $("#registrant_select_business_typeLabel");
+            }
+        }
+        else{
+            $("#registrant_select_business_typeLabel").removeClass("text-danger");
+        }
+
+
+        if(email.trim() === ""){
+            form_is_valid = false;
             $("#registrant_email").addClass("border-danger").focus();
-            $("#invalidRegisterForm").html("Invalid email address").removeClass("d-none");
-            $(registerModal).animate({ scrollTop: 0 }, "slow");
-            return;
+
+            if(first_invalid_input === null){
+                first_invalid_input = $("#registrant_email");
+            }
+        }
+        else{
+            if(email.includes("@") === false){
+                form_is_valid = false;
+
+                if(first_invalid_input === null){
+                    first_invalid_input = $("#registrant_email");
+                }
+
+                if(form_is_valid === true){
+                    $("#registrant_email").addClass("border-danger").focus();
+                    $("#invalidRegisterForm").html("Invalid email address").removeClass("d-none");
+                    $(registerModal).animate({ scrollTop: 0 }, "slow");
+                    return;
+                }
+                else{
+                    $("#registrant_email").addClass("border-danger").focus();
+                    $("#invalidRegisterForm").html("Fields marked with * are required, also your e-mail address is invalid!").removeClass("d-none");
+                    $(registerModal).animate({ scrollTop: 0 }, "slow");
+                    return;
+                }
+            }
+            else{
+                $("#registrant_email").removeClass("border-danger");
+            }
         }
 
+        
+        if(form_is_valid === false){
+            $("#invalidRegisterForm").html("Fields marked with * are required!  ").removeClass("d-none");
+            if(first_invalid_input !== null){
+                $(first_invalid_input).focus();
+                $(registerModal).animate({ scrollTop: 0 }, "slow");
+                console.log($(first_invalid_input))
+                console.log($(first_invalid_input).offset().top);
+            }
+            return;
+        }
         $.ajax({
             url: 'shopmanager/register-applicant/',
             type: 'POST',
@@ -186,17 +294,22 @@ $(document).ready(function(){
                 'contact_person': contact_person,
                 'email': email,
                 'phone_number': phone_number,
+                'business_type': business_type,
+                'registration_note': registration_note,
                 csrfmiddlewaretoken: csrf_token,
             },
             dataType: 'json',
             success: function(data){
                 $(registerModal).modal("hide");
+                // clear all inputs except business type
+                if($("#invalidRegisterForm").hasClass("d-none") === false){
+                    $("#invalidRegisterForm").addClass("d-none");
+                }
                 alert_remove_classes(alert);
                 $(alert).addClass("alert-success");
                 $(alert).removeClass("d-none");
                 $(alert_text).text("Your application has been submitted. We will contact you soon.");
                 $("html, body").animate({ scrollTop: 0 }, "slow");
-
 
                 console.log('SUCCESS')
             },
@@ -506,8 +619,3 @@ $(document).ready(function(){
 
 
 });
-
-// Dynamic heights
-// If the height of a modal changes while 
-// it is open, you should call 
-// myModal.handleUpdate() to readjust the modal’s position in case a scrollbar appears.

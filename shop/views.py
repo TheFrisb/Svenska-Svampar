@@ -6,7 +6,7 @@ from shop.models import *
 from shopmanager.models import Register_Application
 from django.contrib.auth import authenticate, login
 from shopmanager.mail_api import send_mails
-# Create your views here.
+
 
 logger = logging.getLogger('shop')
 
@@ -14,7 +14,6 @@ def shop_home(request):
     if request.user.is_authenticated:
         user_profile = UserProfile.objects.get(user=request.user)
         user_class = user_profile.user_class
-        print(user_profile.business_name)
         products = Product.objects.all().order_by('-created_at')
         product_prices = {}
         for product in products:
@@ -24,11 +23,13 @@ def shop_home(request):
             except ProductPrice.DoesNotExist:
                 product_prices[product] = None
 
+
         context = {
             'user_profile': user_profile,
             'product_prices': product_prices,
         }
         if request.user.is_staff:
+            context['is_admin'] = True
             context['new_registrations_count'] = Register_Application.objects.filter(is_dismissed=False).count()
     else:
         user_profile = None
@@ -56,6 +57,8 @@ def check_product_quantity(request):
                 return JsonResponse({'error': 'Product does not exist.'}, status=400)
             
             if (quantity > product.stock):
+                user_profile = UserProfile.objects.get(user=request.user)
+                send_mails.failed_add_to_cart_mail(product, quantity, user_profile)
                 return JsonResponse({'error': 'Not enough stock.'}, status=400)
             else:
                 return JsonResponse({'message': 'Enough stock.'}, status=200)

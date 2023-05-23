@@ -60,11 +60,15 @@
                     <div class="card-body">
                         <div class="text-bold text-primary pb-3 fs-5 fw-bold">{{ applicant.business_name }}<div class=" fw-normal fs-6 font-italic">{{ applicant.created_at }}</div></div>
 
-                        <div>{{ applicant.contact_person }}</div>
-                        <div>{{ applicant.phone_number }}</div>
-                        <div>{{ applicant.email }}</div>
-                        <div>{{ applicant.city }}</div>
-                        <div>{{ applicant.address }}</div>
+                        <div><span class="fw-semibold">Contact:</span> {{ applicant.contact_person }}</div>
+                        <div><span class="fw-semibold">Phone:</span> {{ applicant.phone_number }}</div>
+                        <div><span class="fw-semibold">Email:</span> {{ applicant.email }}</div>
+                        <div><span class="fw-semibold">City:</span> {{ applicant.city }}</div>
+                        <div><span class="fw-semibold">Address:</span> {{ applicant.address }}</div>
+                        <div><span class="fw-semibold">Business type:</span> {{ applicant.business_type }}</div>
+                        {% if applicant.registration_note %}
+                        <div><span class="fw-semibold">Registration note:</span> {{ applicant.registration_note }}</div>
+                        {% endif %}
                     </div>
                     <div class="card-footer d-flex justify-content-between">
                         <button class="btn btn-sm btn-secondary dismiss-userBtn" data-registrant-id="{{ applicant.id }}">Dismiss</button>

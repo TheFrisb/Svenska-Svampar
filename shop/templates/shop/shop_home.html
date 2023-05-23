@@ -25,7 +25,7 @@
                             Arnr <span class="card-productSku">{{ product.sku }}</span>
                             <br>
                             EAN: {{ product.ean_code }}
-                            {% if request.user.is_staff %}
+                            {% if is_admin %}
                                 <br>
                                 {% if product.stock < 50  and product.stock > 0 %}
                                 <span class="text-warning fw-bold">Stock: {{ product.stock }}</span>
@@ -35,15 +35,15 @@
                                 Stock: {{ product.stock }}
                                 {% endif %}
                             {% endif %}
-                            {% if user_profile  and price.price %}
+                            {% if user_profile and price.price and not is_admin %}
                                 <br>
                                 Pris: <span class="card-pricePerUnit">{{ price.price|divide:product.quantity_shipped }}</span>
                             {% endif %}
                         </p>
                     </div>
-                    {% if price.price %}
+                    {% if price.price and not is_admin %}
                         
-                        <div class="card-text fw-semibold fs-5 text-danger pt-2">Price per unit <span class="card-productPrice">{{ price.price }}</span>$ excl. VAT</div>
+                        <div class="card-text fw-semibold fs-5 text-danger pt-2">Price per unit <span class="card-productPrice">{{ price.price }}</span> kr excl. VAT</div>
                         {% if product.stock > 0 %}
                             <div class="input-group my-3  rounded w-50 mx-auto quantityContainer">
                                 <button class="btn btn-sm w-25 btn-outline-success quantityBtn quantityMinus" type="button" >-</button>
@@ -54,6 +54,9 @@
                                     <button class="btn btn-success w-100 grow addToCartBtn" data-product-id="{{ product.id }}">Add to Cart</button>
                                 {% endif %}
                         {% endif %}
+                    {% endif %}
+                    {% if not price.price and not is_admin %}
+                        <div class="card-text fw-semibold fs-5 text-danger pt-2">Contact us for price!</div>
                     {% endif %}
                     {% if not user_profile %}
                             <button class="btn btn-success w-100 mt-3" data-bs-toggle="modal" data-bs-target="#loginModal">Login</button>
@@ -152,28 +155,28 @@
                     <input type="text" class="form-control" name="phone_number" id="registrant_phone_number">
                 </div>
                 <div class="m-2">
-                    <label for="business_type" class="form-label">Select your business type <span class="fw-bold text-danger">*</span></label>
+                    <label for="business_type" class="form-label" id="registrant_select_business_typeLabel">Select your business type <span class="fw-bold text-danger">*</span></label>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="registrant_business_type" id="registrant_business_type_wholesale" value="wholesale">
-                        <label class="form-check-label" for="business_type_wholesale">
+                        <input class="form-check-input" type="radio" name="registrant_business_type" id="registrant_business_type_wholesale" value="Wholesale">
+                        <label class="form-check-label" for="registrant_business_type_wholesale">
                           Wholesale
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="registrant_business_type" id="registrant_business_type_restaurant" value="restaurant">
-                        <label class="form-check-label" for="business_type_restaurant">
+                        <input class="form-check-input" type="radio" name="registrant_business_type" id="registrant_business_type_restaurant" value="Restaurant">
+                        <label class="form-check-label" for="registrant_business_type_restaurant">
                           Restaurant
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="registrant_business_type" id="registrant_business_type_marketstand" value="marketstand">
-                        <label class="form-check-label" for="business_type_marketstand">
+                        <input class="form-check-input" type="radio" name="registrant_business_type" id="registrant_business_type_marketstand" value="Market Stand">
+                        <label class="form-check-label" for="registrant_business_type_marketstand">
                           Market stand
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="registrant_business_type" id="registrant_business_type_other" value="other">
-                        <label class="form-check-label" for="business_type_other">
+                        <input class="form-check-input" type="radio" name="registrant_business_type" id="registrant_business_type_other" value="Other">
+                        <label class="form-check-label" for="registrant_business_type_other">
                           Other
                         </label>
                     </div>
@@ -212,13 +215,13 @@
             <h5 class="card-title cartItemName"></h5>
             <div class="card-text text-secondary ">Arnr: <span class="cartItemSku"></span></div>
             <div class="card-text">Pris: <span class="cartItemPrice-Each"></span></div>
-            <div class="card-text">Package price: <span class="cartItemPrice"></span>$</div>
+            <div class="card-text">Package price: <span class="cartItemPrice"></span> kr</div>
             <div class="input-group my-3  rounded w-75 mx-auto">
                 <button class="btn btn-sm w-25 btn-outline-success cartQuantityBtn quantityMinus" type="button" >-</button>
                 <input type="number" class="form-control text-center border border-solid border-success cartItemQuantity" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" min="1" value="1">
                 <button class="btn btn-sm w-25 btn-outline-success cartQuantityBtn quantityPlus" type="button">+</button>
             </div>
-            <div class="card-text text-center fs-5 fw-semibold">Total: <span class="cartItemTotalPrice"></span>$</div>
+            <div class="card-text text-center fs-5 fw-semibold">Total: <span class="cartItemTotalPrice"></span> kr</div>
         </div>
     </div>  
 </div>
@@ -239,7 +242,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <p class="fw-semibold fs-5">Total: <span id="cartTotal" class="fw-bold"></span><span class="fw-bold">$</span></p>
+            <p class="fw-semibold fs-5">Total: <span id="cartTotal" class="fw-bold"></span><span class="fw-bold"> kr</span></p>
             <button type="button" class="btn btn-success" id="place_orderBtn">Purchase</button>
           </div>
         </div>
@@ -257,23 +260,3 @@
 {% endblock scripts %}
 
 
-<!-- 
-{% for product, price in product_prices.items %}
-<div class="col-12 col-sm-6 col-lg-4 col-xl-3 product-card-holder">
-    <div class="card grow" style="box-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.25);">
-        <img src="{{ product.thumbnail.url }}" alt="" class="card-img-top">
-        <div class="card-body">
-            <h5 class="card-title">{{ product.name }}</h5>
-            <div class="card-text text-secondary">{{ product.sku }}</div>
-            <div class="card-text ">Pris: 13.34$</div>
-            <div class="card-text">Package price: {{ price.price }}</div>
-            <div class="input-group my-3  rounded w-75 mx-auto">
-                <button class="btn btn-sm w-25 btn-outline-success quantityBtn quantityMinus" type="button" >-</button>
-                <input type="number" class="form-control text-center border border-solid border-success product_quantity" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" min="1" value="1">
-                <button class="btn btn-sm w-25 btn-outline-success quantityBtn quantityPlus" type="button">+</button>
-            </div>
-            <div class="card-text text-center fs-5 fw-semibold">Total: {{ price.price }}$</div>
-        </div>
-    </div>  
-</div>
-{% endfor %} -->

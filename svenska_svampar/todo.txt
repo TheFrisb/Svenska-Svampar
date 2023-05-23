@@ -1,8 +1,5 @@
-
-2. fix decouple config
-
-3. Total price bez danok + display so danok
-4. Add za admin all prices for item
+3. Total price bez danok + display so danok i u shopmanager
+4. order subtotal bez danok, danok i total.  i u shopmanager
 
 5. Fix pdf
 - Phone gore desno ne
@@ -17,18 +14,3 @@
 - Vart ordernr fakturanr povrzani se zaedno, taa faktura e izdadena za taj broj
 - exkl moms 150 + 12%
 
-
-6. Register_Application
-- validate frontend
-- handle backend
-- show in shopmanager
-
-
-
-8. Reorganize admin
-9. Tidy up Code
-10. Check shopmanager
-
-
-
-10. Sredi mails + za order fail mail-o

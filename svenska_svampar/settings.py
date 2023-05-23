@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import logging
 import os
+from decouple import config
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,14 +22,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-y9akfc##_z13srq0)l$l07d2n&4wz*0)03q&h$lh0%a=4ctf(5'
+SECRET_KEY = config('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
+WKHTMLTOPDF_CMD = config('WKHTMLTOPDF_PATH')
 ALLOWED_HOSTS = ['www.svenskasvampar.se', 'svenskasvampar.se', '161.35.22.45']
 
-#WKHTMLTOPDF_CMD = 'C:/Program Files/wkhtmltopdf/bin/wkhtmltopdf.exe'
 
 
 # Application definition
@@ -191,3 +193,34 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#        'NAME': 'svenska_svampar',
+#        'USER': 'svenska_svampar_user',
+#        'PASSWORD': 'svenksa_svampar_db_mainUser123',
+#        'HOST': 'localhost',
+#        'PORT': '',
+#    }
+#}
+
+# DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#        'NAME': config('db_name'),
+#        'USER': config('db_user'),
+#        'PASSWORD': config('db_password'),
+#        'HOST': config('db_host'),
+#        'PORT': '',
+#    }
+# }
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.elasticemail.com'
+EMAIL_PORT = 2525
+EMAIL_HOST_USER = 'thefrisb@gmail.com'
+EMAIL_HOST_PASSWORD = '9F31898EACDC990FD8A159C95E102C08873D'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+DEFAULT_FROM_EMAIL = 'thefrisb@gmail.com'  # Set the default "from" address
