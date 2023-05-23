@@ -18,11 +18,11 @@
                 <div class="card-body">
                   <div class="d-flex flex-wrap justify-content-between align-items-center">
                     <div class="card-text fw-semibold fs-5">Order #{{ order.id }}</div>
-                    <div class="card-text fw-semibold">{{ order.total_price }} eur</div>
+                    <div class="card-text fw-semibold">{{ order.total_price }} kr</div>
                   </div>
                   <div class="pb-3">{{ order.created_at|date:"y/m/d H:i:s" }}</div>
                   {% for item in order.orderitem_set.all %}
-                        <div class="card-text">{{ item.product.name }} x {{ item.quantity }} - {{ item.total_price }} eur</div>
+                        <div class="card-text">{{ item.product.name }} x {{ item.quantity }} - {{ item.total_price }} kr</div>
                   {% endfor %}
                   <div class="d-flex flex-wrap justify-content-between align-items-center">
                     <a href="{{ order.get_admin_url }}" class="btn btn-sm btn-dark mt-3" target="_blank">Edit</a>

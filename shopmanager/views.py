@@ -69,7 +69,6 @@ def shopmanager_view_orders(request, pk):
 
 
 def export_orders_as_pdf(request, pk):
-    # if request.method == 'GET':
     if request.user.is_authenticated and request.user.is_staff:
         order = Order.objects.prefetch_related('orderitem_set').filter(user_profile__id=pk).first()
         organization = order.user_profile
@@ -79,24 +78,23 @@ def export_orders_as_pdf(request, pk):
             'organization': organization,
         }
         return PDFTemplateResponse(request, 'shopmanager/pdf_generation/view_order.html', context, cmd_options={'load-error-handling': 'ignore'})
-    # else:
-    #     return HttpResponse('You are not authorized to view this page')
+    else:
+        return HttpResponse('You are not authorized to view this page')
 
 
 
 def register_applicant(request):
     if request.method == 'POST':
-        # try:
         business_name = request.POST.get('business_name')
         city = request.POST.get('city')
         contact_person = request.POST.get('contact_person')
         phone_number = request.POST.get('phone_number')
         email = request.POST.get('email')
         address = request.POST.get('address')
-        # except:
-        #     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
-        
-        if business_name and city and contact_person and phone_number and email and address:
+        business_type = request.POST.get('business_type')
+        registration_note = request.POST.get('registration_note', None)
+        print(business_name, city, contact_person, phone_number, email, address, business_type, registration_note)
+        if business_name and city and contact_person and phone_number and email and address and business_type:
             register_application = Register_Application.objects.create(
                 business_name=business_name,
                 city=city,
@@ -104,6 +102,8 @@ def register_applicant(request):
                 phone_number=phone_number,
                 email=email,
                 address=address,
+                business_type=business_type,
+                registration_note=registration_note,
             )
             register_application.save()
             return JsonResponse({'status': 'success', 'message': 'Application submitted successfully'}, status=200)
