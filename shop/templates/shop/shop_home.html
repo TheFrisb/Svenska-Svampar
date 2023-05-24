@@ -40,7 +40,7 @@
                     </div>
                     {% if price.price and not is_admin %}
                         
-                        <div class="card-text fw-semibold fs-5 text-danger pt-2">Price per unit <span class="card-productPrice">{{ price.price }}</span>sek<br>excl. VAT</div>
+                        <div class="card-text fw-semibold fs-5 text-danger pt-2">Price per unit <span class="card-productPrice">{{ price.price }}</span> sek<br>excl. VAT</div>
                         {% if product.stock > 0 %}
                             <div class="input-group my-3  rounded w-50 mx-auto quantityContainer">
                                 <button class="btn btn-sm w-25 btn-outline-success quantityBtn quantityMinus" type="button" >-</button>
