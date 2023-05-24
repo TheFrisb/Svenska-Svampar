@@ -1,9 +1,5 @@
-1. Push to production
-- fix env
-- fix mailing
-- fix pdf path
-
-2. Pisi za zoho i elasticemail
+1. Staj 0.00 na prices u pdf  generator
+2. Dodaj instagram link
 3. Pozadina stavi
 4. Fix cart total i subtotal design
 5. User class sortiri po vtora bukva
