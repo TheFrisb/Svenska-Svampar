@@ -1,16 +1,16 @@
-3. Total price bez danok + display so danok i u shopmanager
-4. order subtotal bez danok, danok i total.  i u shopmanager
+1. Push to production
+- fix env
+- fix mailing
+- fix pdf path
 
-5. Fix pdf
-- Phone gore desno ne
-- mail da
-- Faktura i ocr broj od 10 do 100
-- Kurndr user id
-- Contact person
-- add field vat nummer i organizaciski broj
-- Forfallodatum +10 dena limit
-- Drojsmalaranta 8% fakticki kolko poveke treba
-- Leveransdatum den na delivery
-- Vart ordernr fakturanr povrzani se zaedno, taa faktura e izdadena za taj broj
-- exkl moms 150 + 12%
+2. Pisi za zoho i elasticemail
+3. Pozadina stavi
+4. Fix cart total i subtotal design
+5. User class sortiri po vtora bukva
+6. Products sortiri po nesto
+7. Smeni font na svenska svampar
+8. Smeni boja
+9. Dodadi FAQ
+10. Opravi fly to cart
+11. Staj celery za mails
 

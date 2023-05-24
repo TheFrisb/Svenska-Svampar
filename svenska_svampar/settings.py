@@ -193,34 +193,24 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-#DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#        'NAME': 'svenska_svampar',
-#        'USER': 'svenska_svampar_user',
-#        'PASSWORD': 'svenksa_svampar_db_mainUser123',
-#        'HOST': 'localhost',
-#        'PORT': '',
-#    }
-#}
 
-# DATABASES = {
-#    'default': {
-#        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#        'NAME': config('db_name'),
-#        'USER': config('db_user'),
-#        'PASSWORD': config('db_password'),
-#        'HOST': config('db_host'),
-#        'PORT': '',
-#    }
-# }
+DATABASES = {
+   'default': {
+       'ENGINE': 'django.db.backends.postgresql_psycopg2',
+       'NAME': config('db_name'),
+       'USER': config('db_user'),
+       'PASSWORD': config('db_password'),
+       'HOST': config('db_host'),
+       'PORT': '',
+   }
+}
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.elasticemail.com'
+EMAIL_HOST = config('smtp_host')
 EMAIL_PORT = 2525
-EMAIL_HOST_USER = 'thefrisb@gmail.com'
-EMAIL_HOST_PASSWORD = '9F31898EACDC990FD8A159C95E102C08873D'
+EMAIL_HOST_USER = config('smtp_user')
+EMAIL_HOST_PASSWORD = config('smtp_password')
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
-DEFAULT_FROM_EMAIL = 'thefrisb@gmail.com'  # Set the default "from" address
+DEFAULT_FROM_EMAIL = config('smtp_from_email')  # Set the default "from" address

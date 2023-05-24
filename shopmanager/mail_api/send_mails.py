@@ -20,6 +20,31 @@ def get_admin_url_for_object(obj):
     return 'https://svenskasvampar.se' + admin_url
 
 
+def format_email_html_content(title, html_content):
+    valid_html = '''
+                <!DOCTYPE html>
+                <html lang="en">
+                    <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>{title}</title>
+                    <style>
+                        /* Inline CSS styles for email compatibility */
+                        body {{
+                        margin: 0;
+                        padding: 0;
+                        font-family: Arial, sans-serif;
+                        }}
+                    </style>
+                    </head>
+                <body>
+                    <div>
+                        {html_content}
+                    </div>
+                </body>
+                </html>'''.format(title=title, html_content=html_content)
+    return valid_html
+
 
 # def new_order_mail(order, pdf_path):
 #     message = Mail(
@@ -145,10 +170,13 @@ def get_admin_url_for_object(obj):
 
 
 def new_order_mail(order, pdf_path):
+    title = f'[NEW ORDER] New Order from {order.user_profile.business_name} - {order.created_at.strftime("%d/%m/%Y %H:%M:%S")}'
     html_content = f'<p style="font-weight:600">The invoice is as an attachment</p>'
+    valid_html = format_email_html_content(title, html_content)
+
     email = EmailMessage(
-        subject=f'[NEW ORDER] New Order from {order.user_profile.business_name} - {order.created_at.strftime("%d/%m/%Y %H:%M:%S")}',
-        body=html_content,
+        subject=title,
+        body=valid_html,
         to=['bedzovski@yahoo.com', 'thefrisb@gmail.com', 'info@svenskasvampar.se'],
         attachments=[(f'order_{order.id}.pdf', open(pdf_path, 'rb').read(), 'application/pdf')],
     )
@@ -165,11 +193,13 @@ def new_order_mail(order, pdf_path):
 
 def product_quantity_mail(product):
     if product.stock <= 50 and product.stock > 0:
+        title = f'[LOW STOCK] Product {product.name} - {product.stock} left on stock'
         html_content = f'<p>Product <strong>{product.name}</strong> has <strong style="text-decoration:underline">{product.stock} stock left</strong></p><br>\
                       <a href="{get_admin_url_for_object(product)}" target="_blank" style="text-decoration: none;background: blue;font-weight: 600;padding: 5px 10px;border-radius: 4px;color: white;">Update stock</a>'
+        valid_html = format_email_html_content(title, html_content)
         email = EmailMessage(
-            subject=f'[LOW STOCK] Product {product.name} - {product.stock} left on stock',
-            body=html_content,
+            subject=title,
+            body=valid_html,
             to=['bedzovski@yahoo.com', 'thefrisb@gmail.com', 'info@svenskasvampar.se']
         )
         email.content_subtype = "html"
@@ -183,11 +213,13 @@ def product_quantity_mail(product):
             return False
         
     elif product.stock == 0:
+        title = f'[OUT OF STOCK] Product {product.name} - isout of stock'
         html_content =  html_content = f'<p>Product <strong>{product.name}</strong> is <strong style="text-decoration:underline">out of stock</strong></p><br>\
                             <a href="{get_admin_url_for_object(product)}" target="_blank" style="text-decoration: none;background: blue;font-weight: 600;padding: 5px 10px;border-radius: 4px;color: white;">Update stock</a>'
+        valid_html = format_email_html_content(title, html_content)
         email = EmailMessage(
-            subject=f'[OUT OF STOCK] Product {product.name} - isout of stock',
-            body=html_content,
+            subject=title,
+            body=valid_html,
             to=['bedzovski@yahoo.com', 'thefrisb@gmail.com', 'info@svenskasvampar.se']
         )
         email.content_subtype = "html"  
@@ -205,6 +237,7 @@ def product_quantity_mail(product):
 def new_registerApplication_mail(application):
     link_url = 'https://svenskasvampar.se' + reverse('shopmanager:shopmanager-home')
     created_at_formatted = application.created_at.strftime('%Y-%m-%d %H:%M:%S')
+    title = f'[INFO] New register application from {application.business_name}'
     html_content = f'<p>New application ({created_at_formatted})</p> \
                 <p>Name: <strong>{application.business_name}</strong></p> \
                 <p>Contact person: <strong>{application.contact_person}</strong></p> \
@@ -215,10 +248,11 @@ def new_registerApplication_mail(application):
                 <p>Business type: <strong>{application.business_type}</strong></p> \
                 <p>Customer note: <strong>{application.registration_note}</strong></p><br> \
                 <a href="{link_url}" target="_blank" style="text-decoration: none;background: blue;font-weight: 600;padding: 5px 10px;border-radius: 4px;color: white;">Check application</a>'
+    valid_html = format_email_html_content(title, html_content)
     
     email = EmailMessage(
-        subject=f'[INFO] New register application from {application.business_name}',
-        body=html_content,
+        subject=title,
+        body=valid_html,
         to=['bedzovski@yahoo.com', 'thefrisb@gmail.com', 'info@svenskasvampar.se']
     )
     email.content_subtype = "html"
@@ -236,6 +270,7 @@ def new_registerApplication_mail(application):
 
 def insufficient_stock_mail(user_profile, email_insufficient_stock_items):
     business_name = user_profile.business_name
+    title = f'[Failed order] Failed order from {business_name} - insufficient stock'
     html_content = f'<p>{business_name}, tried to order the following items, but they are out of stock:</p><br>'
     for item in email_insufficient_stock_items:
         html_content += f'<p><strong>{item["name"]}</strong> - x{item["quantity"]}, but we have only {item["stock_left"]} on stock</p>'
@@ -243,9 +278,12 @@ def insufficient_stock_mail(user_profile, email_insufficient_stock_items):
         html_content += f'<p>{user_profile.contact_person}</p><br>'
         html_content += f'<a href="tel:{user_profile.phone_number}" style="text-decoration: none;background: blue;font-weight: 600;padding: 5px 10px;border-radius: 4px;color: white;">Call {user_profile.phone_number}</a><br>'
 
+    valid_html = format_email_html_content(title, html_content)
+    
+
     email = EmailMessage(
-        subject=f'[Failed order] Failed order from {business_name} - insufficient stock',
-        body=html_content,
+        subject=title,
+        body=valid_html,
         to=['bedzovski@yahoo.com', 'thefrisb@gmail.com', 'info@svenskasvampar.se']
     )
     email.content_subtype = "html"
@@ -260,13 +298,16 @@ def insufficient_stock_mail(user_profile, email_insufficient_stock_items):
 
 def failed_add_to_cart_mail(product, quantity, user_profile):
     business_name = user_profile.business_name
+    title = f'[Failed add to cart] {business_name} tried to buy {product.name} - insufficient stock'
     html_content = f'<p>{business_name}, tried to add {product.name} x {quantity} to cart, but we only have {product.stock}</p>'
     html_content += f'<p>{user_profile.contact_person}</p><br>'
     html_content += f'<a href="tel:{user_profile.phone_number}" style="text-decoration: none;background: blue;font-weight: 600;padding: 5px 10px;border-radius: 4px;color: white;">Call {user_profile.phone_number}</a><br>'
 
+    valid_html = format_email_html_content(title, html_content)
+
     email = EmailMessage(
-        subject=f'[Failed add to cart] {business_name} tried to buy {product.name} - insufficient stock',
-        body=html_content,
+        subject=title,
+        body=valid_html,
         to=['bedzovski@yahoo.com', 'thefrisb@gmail.com', 'info@svenskasvampar.se']
     )
     email.content_subtype = "html"

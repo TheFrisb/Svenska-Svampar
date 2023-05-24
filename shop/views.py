@@ -6,6 +6,9 @@ from shop.models import *
 from shopmanager.models import Register_Application
 from django.contrib.auth import authenticate, login
 from shopmanager.mail_api import send_mails
+from random import randint
+from shopmanager.mail_api import send_mails
+from shopmanager.pdf_generation import generate_pdf
 
 
 logger = logging.getLogger('shop')
@@ -108,12 +111,13 @@ def create_order(request):
                     }, status=400)
             else:
                 order = Order.objects.create(user=user, user_profile = user_profile)
+                order_subtotal = 0
                 order_total = 0
                 created_products = []
                 for prod_id, quantity in cart_items.items():
                     product = Product.objects.get(id=int(prod_id))
                     product_price = ProductPrice.objects.filter(product=product, user_class=user_class).values_list('price', flat=True).get()
-                    order_total += product_price * quantity
+                    order_subtotal += product_price * quantity
                     OrderItem.objects.create(order=order, product=product, quantity=quantity,
                                               price_each = product_price, total_price = product_price * quantity)
                     product.stock -= quantity
@@ -124,11 +128,18 @@ def create_order(request):
                         'price': product_price,
                         'total_price': product_price * quantity,
                     }
-                    print(product_price)
                     created_products.append(product_dict)
-                
+
+                order_total = order_subtotal + (order_subtotal * 0.12)
+                order.subtotal_price = order_subtotal
                 order.total_price = order_total
                 order.save()
+
+                invoice_number = str(100 + order.id)
+                invoice_ocr = invoice_number + str(randint(10, 99))
+
+                Order.objects.filter(id=order.id).update(invoice_number=invoice_number, invoice_ocr=invoice_ocr)
+                send_mails.new_order_mail(order, generate_pdf.export_orders_as_pdf(user_profile  ,order))
                 return JsonResponse(
                     {
                     'message': 'Order created.',

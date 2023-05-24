@@ -24,9 +24,7 @@
                         <p class="card-text ">
                             Arnr <span class="card-productSku">{{ product.sku }}</span>
                             <br>
-                            EAN: {{ product.ean_code }}
                             {% if is_admin %}
-                                <br>
                                 {% if product.stock < 50  and product.stock > 0 %}
                                 <span class="text-warning fw-bold">Stock: {{ product.stock }}</span>
                                 {% elif product.stock == 0 %}
@@ -36,14 +34,13 @@
                                 {% endif %}
                             {% endif %}
                             {% if user_profile and price.price and not is_admin %}
-                                <br>
-                                Pris: <span class="card-pricePerUnit">{{ price.price|divide:product.quantity_shipped }}</span>
+                                Pris: <span class="card-pricePerUnit">{{ price.price|divide:product.quantity_shipped|floatformat:2 }} sek</span>
                             {% endif %}
                         </p>
                     </div>
                     {% if price.price and not is_admin %}
                         
-                        <div class="card-text fw-semibold fs-5 text-danger pt-2">Price per unit <span class="card-productPrice">{{ price.price }}</span> kr excl. VAT</div>
+                        <div class="card-text fw-semibold fs-5 text-danger pt-2">Price per unit <span class="card-productPrice">{{ price.price }}</span>sek<br>excl. VAT</div>
                         {% if product.stock > 0 %}
                             <div class="input-group my-3  rounded w-50 mx-auto quantityContainer">
                                 <button class="btn btn-sm w-25 btn-outline-success quantityBtn quantityMinus" type="button" >-</button>
@@ -215,13 +212,13 @@
             <h5 class="card-title cartItemName"></h5>
             <div class="card-text text-secondary ">Arnr: <span class="cartItemSku"></span></div>
             <div class="card-text">Pris: <span class="cartItemPrice-Each"></span></div>
-            <div class="card-text">Package price: <span class="cartItemPrice"></span> kr</div>
+            <div class="card-text">Package price: <span class="cartItemPrice"></span> sek</div>
             <div class="input-group my-3  rounded w-75 mx-auto">
                 <button class="btn btn-sm w-25 btn-outline-success cartQuantityBtn quantityMinus" type="button" >-</button>
                 <input type="number" class="form-control text-center border border-solid border-success cartItemQuantity" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" min="1" value="1">
                 <button class="btn btn-sm w-25 btn-outline-success cartQuantityBtn quantityPlus" type="button">+</button>
             </div>
-            <div class="card-text text-center fs-5 fw-semibold">Total: <span class="cartItemTotalPrice"></span> kr</div>
+            <div class="card-text text-center fs-5 fw-semibold">Total: <span class="cartItemTotalPrice"></span> sek</div>
         </div>
     </div>  
 </div>
@@ -242,8 +239,19 @@
             </div>
           </div>
           <div class="modal-footer">
-            <p class="fw-semibold fs-5">Total: <span id="cartTotal" class="fw-bold"></span><span class="fw-bold"> kr</span></p>
-            <button type="button" class="btn btn-success" id="place_orderBtn">Purchase</button>
+            <div class="row w-100">
+                <div class="col-12 col-lg-6 d-flex justify-content-center justify-content-lg-start align-items-center">
+                    <div class="fs-6 d-flex justify-content-start align-items-center p-2" style="gap:5px!important">Subtotal: <span id="cartSubtotal" class="fw-semibold">123</span><span class="fw-semibold"> sek</span> <span class="fs-6 fw-normal text-secondary">(excl. 12% VAT)</span></div>
+                </div>
+                <div class="col-12 col-lg-6 d-flex justify-content-center justify-content-lg-end align-items-center">
+                    <div class="fw-semibold fs-5 d-flex justify-content-start align-items-center p-2" style="gap:5px!important">Total: <span id="cartTotal" class="fw-bold"></span><span class="fw-bold"> sek</span> <span class="fs-5 fw-normal text-secondary">(<span id="cartTotalVat"></span> sek VAT)</span></div>
+                </div>
+            </div>
+            <div class="row w-100">
+                <div class="col-12 d-flex justify-content-center justify-content-lg-end align-items-center">
+                    <button type="button" class="btn btn-success flex-grow-1 flex-lg-grow-0" id="place_orderBtn">Purchase</button>
+                </div>
+            </div>
           </div>
         </div>
       </div>
