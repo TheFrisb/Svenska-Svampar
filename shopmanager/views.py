@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from wkhtmltopdf.views import PDFTemplateResponse
-import json
 from shop.models import Order, OrderItem, UserProfile, Product, UserClass, ProductPrice
 from .models import *
 from .mail_api import send_mails
@@ -70,7 +69,7 @@ def shopmanager_view_orders(request, pk):
 
 def export_orders_as_pdf(request, pk):
     if request.user.is_authenticated and request.user.is_staff:
-        order = Order.objects.prefetch_related('orderitem_set').filter(user_profile__id=pk).first()
+        order = Order.objects.prefetch_related('orderitem_set').filter(id=pk).first()
         organization = order.user_profile
         
         context = {

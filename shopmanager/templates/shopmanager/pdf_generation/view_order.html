@@ -3,6 +3,7 @@
 <html>
 <head>
     <title>Orders</title>
+    <meta charset="utf-8">
 </head>
 <body>
     <style>
@@ -10,19 +11,16 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-size: 13px;
         }
-        html, body{
+        html{
             height: 100%;
-            font-size: 13px;
         }
         body{
-            font-family: 'Roboto', sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
         }
         .container {
             padding: 2%;
-            height: 100%;
-            width: 100%;
         }
         .text-right{
             text-align: right;
@@ -33,14 +31,11 @@
         .padding-left-text{
             padding-left: 10px;
         }
-        p, td{
-            margin: 0;
-            
+        p{
+            margin-bottom:3px;
         }
         .row{
-
             width:100%;
-
         }
         .col{
             width: 50%;
@@ -60,7 +55,7 @@
         }
        
         table th, td{
-            font-size: 13px;
+            font-size: 14px;
             font-weight: normal;
         }
         .gap-left{
@@ -78,25 +73,28 @@
     <div class="container">
         <div class="row">
             <div class="col" style="float: left; width:50%;">
-                <img src="https://i.ibb.co/qxNBzh9/logo.png" alt="" width="200" height="200" >
+                <img src="http://127.0.0.1:8000/static/shopmanager/assets/logo_pdf.png" alt="" width="200" height="200" >
             </div>
             <div class="col" style="width: 50%; display:inline-block">
                 <h2 style="font-size: 24px;">Faktura</h2>
                 <div style="float: right;">
                     <div class="row-left">
                         <p class="text-left">Fakturadatum</p>
-                        <p class="text-left">Phone: </p>
+                        <p class="text-left">Fakturanr</p>
+                        <p class="text-left">OCR</p>
                         <p class="text-left">Email:</p>
                     </div>
                     <div class="row-right gap-left">
                         <p>{{ order.created_at|date:"Y/m/d" }}</p>
-                        <p>asd</p>
-                        <p>123123</p>
+                        <p>{{ order.invoice_number }}</p>
+                        <p>{{ order.invoice_ocr }}</p>
+                        <p>info@svenskasvampar.se</p>
                     </div>
                 </div>
                 <div style="width:100%; float:left">
                     <p><strong>{{ organization.business_name }}</strong></p>
                     <p><strong>{{ organization.address }}</strong></p>
+                    <p><strong>{{ organization.postal_code }}</strong></p>
                     <p><strong>{{ organization.city }}</strong></p>
                 
                 </div>
@@ -113,7 +111,13 @@
                     <div class="row-right gap-left">
                         <p>{{ organization.id }}</p>
                         <p>{{ organization.contact_person }}</p>
-                        <p>{{ organization.organization_number }}</p>
+                        {% if organization.organization_number %}
+                            <p>{{ organization.organization_number }}</p>
+                        {% elif organization.sweden_organization_number %}
+                            <p>{{ organization.sweden_organization_number }}</p>
+                        {% else %}
+                            <p>Not available</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>
@@ -130,9 +134,9 @@
                     <div class="row-right gap-left">
                         <p>Vladimir Mitev</p>
                         <p>10 dagar</p>
-                        <p>{{ date_plus_10_days }}</p>
+                        <p>{{ order.get_10_days_ahead|date:"Y/m/d" }}</p>
                         <p>8%</p>
-                        <p>I do not know</p>
+                        <p>TO BE FIXED SOON ???</p>
                         <p>{{ order.id }}</p>
                     </div>
                 </div>
@@ -146,7 +150,7 @@
                         <th class="text-left">Benamning</th>
                         <th style="text-align:center;">Lev ant</th>
                         <th class="text-left">Enh</th>
-                        <th class="text-right">Pris</th>
+                        <th style="text-align:center;">Pris</th>
                         <th class="text-right">Summa</th>
                     </tr>
                 </thead>
@@ -155,16 +159,16 @@
                     <tr>
                         <td class="text-left">{{ item.product.sku }}</td>
                         <td class="text-left">{{ item.product.name }}</td>
-                        <td style="text-align:center;">{{ item.total_price }}</td>
+                        <td style="text-align:center;">{{ item.quantity }}</td>
                         <td class="text-left">kg</td>
-                        <td class="text-right">{{ item.price_each }}</td>
-                        <td class="text-right">{{ item.total_price }}</td>
+                        <td style="text-align:center;">{{ item.price_each }} sek</td>
+                        <td class="text-right">{{ item.total_price }} sek</td>
                     {% endfor %}
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div class="row" style="padding:2%;position:absolute;bottom:0;">
+        <div class="row" style="padding:2%;position:absolute;bottom:2%!important;">
             <div class="row">
                 <table class="secondary-table">
                     <thead>
@@ -178,11 +182,11 @@
                     </thead>
                     <tbody style="border-bottom: 1px solid black;">
                         <tr>
-                            <td class="text-left">{{ order.subtotal_price }}</td>
-                            <td class="text-left">{{ order.tax }}</td>
+                            <td class="text-left">{{ order.subtotal_price|floatformat:2 }}</td>
+                            <td class="text-left">{{ order.get_order_vat|floatformat:2 }}</td>
                             <td style="text-align:center;">-0,20</td>
-                            <td style="text-align:center;">{{ order.total_price }}</td>
-                            <td class="text-right" style="font-size: 18px; font-weight: bolder;">SEK {{ order.total_price }}</td>
+                            <td style="text-align:center;">{{ order.total_price|floatformat:2 }}</td>
+                            <td class="text-right" style="font-size: 18px; font-weight: bolder;">SEK {{ order.total_price|floatformat:2 }}</td>
     
                         </tr>
                     </tbody>
@@ -190,10 +194,10 @@
             </div>
             <div class="row" style="padding:10px 0px;">
                 <div class="col" style="float:left">
-                    <p>Moms 12% {{ order.subtotal_price }} ({{ order.total_price }})</p>
+                    <p>Moms 12% {{ order.get_order_vat|floatformat:2 }} ({{ order.subtotal_price|floatformat:2 }})</p>
                 </div>
                 <div class="col" style="float:right; text-align:right">
-                    <p>IBAN SE71 8000 0845 2569 4946 4397 BIV SWESES</p>
+                    <p>IBAN SE48 8000 0845 2569 3913 6930 BIC SWEDSESS</p>
                     
                 </div>
             </div>
@@ -205,6 +209,7 @@
                             <p class="text-left">Mitson Bär & Svamp AB</p>
                             <p class="text-left">Stinavägen 3</p>
                             <p class="text-left">691 54 KARLSKOGA</p>
+                            <p class="text-left">Sverige</p>
                         </div>
                         <div class="row-right" style="float:right">
                             <p>Telefon</p>
@@ -212,27 +217,27 @@
                             <p>E post</p>
                             <p>info@svenskasvampar.se</p><br>
                             <p>Webbaddress</p>
-                            <p>www.miton.se</p>
+                            <p>www.svenskasvampar.se</p>
                         </div>
                     </div>
                 </div>
-                <!-- <div class="col" style="float: right">
-                    <div style="float: right">
+                <div class="col" style="float: right">
+                    <div style="margin-left:25%;">
                         <div class="row-left">
                             <p class="text-left">Bankgiro</p>
-                            <p class="text-left">5447-0612</p><br>
-                            <p class="text-left">Sate</p>
+                            <p class="text-left">312-3718</p><br>
+                            <p class="text-left">Säte</p>
                             <p class="text-left">Karlskoga</p>
                         </div>
                         <div class="row-right gap-left" style="padding-left:10px;">
                             <p>Organisationsnr</p>
-                            <p>51435135135</p><br>
+                            <p>559057-4926</p><br>
                             <p>Momsreg. nr</p>
-                            <p>SE12312312321312</p><br>
+                            <p>SE559057492601</p><br>
                             <p>Godkand for F-skatt</p>
                         </div>
                     </div>
-                </div> -->
+                </div>
             </div>
         </div>
 
