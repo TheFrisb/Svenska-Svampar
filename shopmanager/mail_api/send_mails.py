@@ -169,7 +169,6 @@ def format_email_html_content(title, html_content):
 #         return False
     
 
-default_notification_address = config('default_notification_address')
 def new_order_mail(order, pdf_path):
     title = f'[NEW ORDER] New Order from {order.user_profile.business_name} - {order.created_at.strftime("%d/%m/%Y %H:%M:%S")}'
     html_content = f'<p style="font-weight:600">The invoice is as an attachment</p>'
@@ -178,7 +177,7 @@ def new_order_mail(order, pdf_path):
     email = EmailMessage(
         subject=title,
         body=valid_html,
-        to=[default_notification_address],
+        to=['info@svenskasvampar.se'],
         attachments=[(f'order_{order.id}.pdf', open(pdf_path, 'rb').read(), 'application/pdf')],
     )
     email.content_subtype = "html"
@@ -201,7 +200,7 @@ def product_quantity_mail(product):
         email = EmailMessage(
             subject=title,
             body=valid_html,
-            to=[default_notification_address]
+            to=['info@svenskasvampar.se']
         )
         email.content_subtype = "html"
         status = email.send()
@@ -221,7 +220,7 @@ def product_quantity_mail(product):
         email = EmailMessage(
             subject=title,
             body=valid_html,
-            to=[default_notification_address]
+            to=['info@svenskasvampar.se']
         )
         email.content_subtype = "html"  
         status = email.send()
@@ -254,7 +253,7 @@ def new_registerApplication_mail(application):
     email = EmailMessage(
         subject=title,
         body=valid_html,
-        to=[default_notification_address]
+        to=['info@svenskasvampar.se']
     )
     email.content_subtype = "html"
     status = email.send()
@@ -285,7 +284,7 @@ def insufficient_stock_mail(user_profile, email_insufficient_stock_items):
     email = EmailMessage(
         subject=title,
         body=valid_html,
-        to=[default_notification_address]
+        to=['info@svenskasvampar.se']
     )
     email.content_subtype = "html"
     status = email.send()
@@ -309,7 +308,7 @@ def failed_add_to_cart_mail(product, quantity, user_profile):
     email = EmailMessage(
         subject=title,
         body=valid_html,
-        to=[default_notification_address]
+        to=['info@svenskasvampar.se']
     )
     email.content_subtype = "html"
     status = email.send()
