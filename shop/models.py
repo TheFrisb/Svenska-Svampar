@@ -14,8 +14,8 @@ from datetime import timedelta
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='Account', verbose_name='User')
     business_name = models.CharField(max_length=100, blank=True, unique=True, verbose_name='Business Name')
-    organization_number = models.CharField(max_length=100, blank=True, unique=True, verbose_name='Organization Number')
-    sweden_organization_number = models.CharField(max_length=100, blank=True, unique=True, verbose_name='Sweden Organization Number VAT NMMER')
+    organization_number = models.CharField(max_length=100, blank=True, unique=True, verbose_name='Organization Number', null=True)
+    sweden_organization_number = models.CharField(max_length=100, blank=True, unique=True, verbose_name='Sweden Organization Number VAT NMMER', null=True)
     contact_person = models.CharField(max_length=100, blank=True, verbose_name='Contact Person')
     phone_number = models.CharField(max_length=100, blank=True, verbose_name='Phone Number')
     email = models.CharField(max_length=100, blank=True, verbose_name='Email')
