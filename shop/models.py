@@ -101,13 +101,13 @@ class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, verbose_name='User Profile')
     order_date = models.DateTimeField(auto_now_add=True, verbose_name='Order Date')
-    subtotal_price = models.FloatField(null = True, verbose_name='Subtotal Price (excl. VAT)')
-    total_price = models.FloatField(null = True, verbose_name='Total Price')
+    subtotal_pricea = models.FloatField(null = True, verbose_name='Subtotal Price (excl. VAT)')
+    total_pricea = models.FloatField(null = True, verbose_name='Total Price')
     created_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Created At')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Updated At')
     is_mail_sent = models.BooleanField(default=False, verbose_name='Is Mail Sent?')
-    invoice_number = models.CharField(max_length=100, blank=True, null=True, verbose_name='Invoice Number')
-    invoice_ocr = models.CharField(max_length=100, blank=True, null=True, verbose_name='Invoice OCR')
+    invoice_numbera = models.CharField(max_length=100, blank=True, null=True, verbose_name='Invoice Number')
+    invoice_ocra = models.CharField(max_length=100, blank=True, null=True, verbose_name='Invoice OCR')
 
     @property
     def get_order_vat(self):
