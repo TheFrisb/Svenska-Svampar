@@ -13,11 +13,11 @@ from django.urls import reverse
 def shopmanager_home(request):
     if request.user.is_authenticated:
         if request.user.is_staff:
-            products = Product.objects.all().order_by('-created_at')
+            products = Product.objects.all().order_by('name')
             organizations = UserProfile.objects.all().values('id', 'business_name')
             register_applications = Register_Application.objects.filter(is_dismissed=False).order_by('-created_at')
             new_registrations_count = register_applications.count()
-            user_classes = UserClass.objects.all()
+            user_classes = UserClass.objects.all().order_by('name')
             new_user_profile_url = reverse('admin:shop_userprofile_add')
             # for all user_classes get the product name and their prices
             
