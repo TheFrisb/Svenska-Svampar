@@ -1,5 +1,5 @@
 **/migrations/
-/**/**/__pycache__/
+/shop/templatetags/__pycache__/
 __pycache__/
 /svenska_svampar/wsgi.py
 *.env
