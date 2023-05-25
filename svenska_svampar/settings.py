@@ -128,8 +128,7 @@ asd = 502
 logger = logging.getLogger(__name__)
 
 WSGI_APPLICATION = 'svenska_svampar.wsgi.application'
-asd = 123
-
+asd = 1232
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
