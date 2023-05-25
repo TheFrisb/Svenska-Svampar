@@ -10,9 +10,13 @@
 11. Staj celery za mails
 13. Fix all posible errors
 13. Write tests. 
+14. opraj faktura
 
 
-6. Products sortiri po nesto
-5. User class sortiri po vtora bukva
+
+
+Done
+1. Staj 0.00 na prices u pdf  generator
 2. Dodaj instagram link
-
+3. Products sortiri po nesto
+4. User class sortiri po buka i po vtora bukva

@@ -76,7 +76,7 @@ def export_orders_as_pdf(request, pk):
             'order': order,
             'organization': organization,
         }
-        return PDFTemplateResponse(request, 'shopmanager/pdf_generation/view_order.html', context, cmd_options={'load-error-handling': 'ignore'})
+        return PDFTemplateResponse(request, 'shopmanager/pdf_generation/delivery_note.html', context, cmd_options={'load-error-handling': 'ignore'})
     else:
         return HttpResponse('You are not authorized to view this page')
 
