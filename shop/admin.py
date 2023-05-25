@@ -9,7 +9,7 @@ class ProductPriceInlineFormSet(BaseInlineFormSet):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.instance.pk is None:  # If UserClass is being created
-            products = Product.objects.all()
+            products = Product.objects.all().order_by('name')
             initial_data = [{'product': product} for product in products]
             self.initial = initial_data
             self.extra = len(products)
