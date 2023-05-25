@@ -11,7 +11,7 @@ def export_orders_as_pdf(user_profile, order):
 
     order = Order.objects.prefetch_related('orderitem_set').filter(id=order.id).first()
 
-    template = get_template('shopmanager/pdf_generation/view_order.html')
+    template = get_template('shopmanager/pdf_generation/delivery_note.html')
     context = {'organization': user_profile, 'order': order}
     html = template.render(context)
 
