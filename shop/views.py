@@ -17,7 +17,7 @@ def shop_home(request):
     if request.user.is_authenticated:
         user_profile = UserProfile.objects.get(user=request.user)
         user_class = user_profile.user_class
-        products = Product.objects.all().order_by('-created_at')
+        products = Product.objects.all().order_by('name')
         product_prices = {}
         for product in products:
             try:
