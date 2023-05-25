@@ -50,6 +50,20 @@ class ProductAdmin(admin.ModelAdmin):
     exclude = ('mail_status', )
     list_display = ('name', 'stock','sku', 'ean_code', 'created_at', 'updated_at', )
 
+    fieldsets = (
+        ('Product Information', {
+            'fields': ('name', 'thumbnail', 'stock', 'quantity_shipped', 'sku', 'ean_code')
+        }),
+        ('Product details', {
+            'fields': ('description', 'country_of_origin', 'temperature_storage', 'storage_information')
+        }),
+        ('Product nutrition (enter only a number)', {
+            'fields': ('energy_kj', 'energy_kcal', 'fat', 'saturated_fat', 'monosaturated_fat', 'polyunsaturated_fat',
+                        'carbohydrates', 'sugar', 'starch', 'protein', 'fiber', 'salt')
+        }),
+
+    )
+
 
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('user', 'user_class', 'created_at', 'updated_at',)
