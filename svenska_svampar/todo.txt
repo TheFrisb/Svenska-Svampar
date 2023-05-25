@@ -1,15 +1,18 @@
-1. Staj 0.00 na prices u pdf  generator
-2. Dodaj instagram link
+
 3. Pozadina stavi
 4. Fix cart total i subtotal design
-5. User class sortiri po vtora bukva
-6. Products sortiri po nesto
+
+
 7. Smeni font na svenska svampar
 8. Smeni boja
 9. Dodadi FAQ
 10. Opravi fly to cart
 11. Staj celery za mails
-12. Konfiguriri sicko da e so .env file i da se stavaat vo .gitignore
 13. Fix all posible errors
 13. Write tests. 
+
+
+6. Products sortiri po nesto
+5. User class sortiri po vtora bukva
+2. Dodaj instagram link
 

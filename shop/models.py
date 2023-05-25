@@ -84,7 +84,7 @@ class UserClass(models.Model):
 
 class ProductPrice(models.Model):
     product = models.ForeignKey('Product', on_delete=models.CASCADE, verbose_name='Product')
-    price = models.IntegerField(verbose_name='Price')
+    price = models.FloatField(verbose_name='Price')
     user_class = models.ForeignKey(UserClass, on_delete=models.CASCADE, verbose_name='User Class')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -138,8 +138,8 @@ class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, verbose_name='Order')
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, verbose_name='Product')
     quantity = models.IntegerField(verbose_name='Quantity')
-    price_each = models.IntegerField(verbose_name='Price Each')
-    total_price = models.IntegerField(verbose_name='Total Price')
+    price_each = models.FloatField(verbose_name='Price Each')
+    total_price = models.FloatField(verbose_name='Total Price')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -23,6 +23,7 @@ class ProductPriceInline(admin.TabularInline):
     
 
 class UserClassAdmin(admin.ModelAdmin):
+    ordering = ('name',)
     inlines = [ProductPriceInline]
 
 
