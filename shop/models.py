@@ -42,7 +42,7 @@ class Product(models.Model):
     name = models.CharField(max_length = 100, verbose_name='Name', db_index=True)
     stock = models.IntegerField(verbose_name='Stock')
     thumbnail = ProcessedImageField(upload_to='products/thumbnails/%Y/%m/%d/', processors=[ResizeToFill(550,550)], format='PNG', options={'quality': 100}, verbose_name='Thumbnail')
-    quantity_shipped = models.IntegerField(default=1, verbose_name='1 box contains in kg')
+    quantity_shipped = models.FloatField(default=1, verbose_name='1 box contains in kg')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     mail_status = models.BooleanField(default=True)
