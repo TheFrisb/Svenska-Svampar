@@ -1,8 +1,9 @@
 **/migrations/
+**/__pycache__/
+__pycache__/
 /svenska_svampar/wsgi.py
 *.env
 .env
 *.log
-__pycache__/
-**__pycache__/
-**/migrations/
+
+
