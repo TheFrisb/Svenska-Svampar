@@ -17,7 +17,7 @@ def shopmanager_home(request):
             organizations = UserProfile.objects.all().values('id', 'business_name')
             register_applications = Register_Application.objects.filter(is_dismissed=False).order_by('-created_at')
             new_registrations_count = register_applications.count()
-            user_classes = UserClass.objects.all().order_by('name')
+            user_classes = UserClass.objects.all().order_by('name').exclude(name='Admin')
             new_user_profile_url = reverse('admin:shop_userprofile_add')
             # for all user_classes get the product name and their prices
             

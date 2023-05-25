@@ -27,6 +27,13 @@ class ProductPriceInline(admin.TabularInline):
 class UserClassAdmin(admin.ModelAdmin):
     ordering = ('name',)
     inlines = [ProductPriceInline]
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        if request.user.is_superuser:
+            return queryset
+        else:
+            queryset = queryset.exclude(name='Admin')
+            return queryset
 
 
 class OrderItemsInline(admin.TabularInline):
