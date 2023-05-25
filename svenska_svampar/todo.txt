@@ -9,4 +9,7 @@
 9. Dodadi FAQ
 10. Opravi fly to cart
 11. Staj celery za mails
+12. Konfiguriri sicko da e so .env file i da se stavaat vo .gitignore
+13. Fix all posible errors
+13. Write tests. 
 

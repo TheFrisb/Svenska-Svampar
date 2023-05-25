@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import logging
 import os
-from decouple import config
+from decouple import config, Csv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -29,10 +29,7 @@ DEBUG = True
 
 
 WKHTMLTOPDF_CMD = config('WKHTMLTOPDF_PATH')
-ALLOWED_HOSTS = ['www.svenskasvampar.se', 'svenskasvampar.se', '161.35.22.45']
-
-
-
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
 # Application definition
 
 INSTALLED_APPS = [
@@ -196,12 +193,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 DATABASES = {
    'default': {
-       'ENGINE': 'django.db.backends.postgresql_psycopg2',
+       'ENGINE': config('db_engine'),
        'NAME': config('db_name'),
        'USER': config('db_user'),
        'PASSWORD': config('db_password'),
        'HOST': config('db_host'),
-       'PORT': '',
+       'PORT': config('db_port'),
    }
 }
 
