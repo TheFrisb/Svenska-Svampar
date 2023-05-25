@@ -43,6 +43,7 @@ def format_email_html_content(title, html_content):
 
 
 def new_order_mail(order, pdf_path):
+    return True
     title = f'[NEW ORDER] New Order from {order.user_profile.business_name} - {order.created_at.strftime("%d/%m/%Y %H:%M:%S")}'
     html_content = f'<p style="font-weight:600">The invoice is as an attachment</p>'
     valid_html = format_email_html_content(title, html_content)
@@ -65,6 +66,7 @@ def new_order_mail(order, pdf_path):
 
 
 def product_quantity_mail(product):
+    return True
     if product.stock <= 50 and product.stock > 0:
         title = f'[LOW STOCK] Product {product.name} - {product.stock} left on stock'
         html_content = f'<p>Product <strong>{product.name}</strong> has <strong style="text-decoration:underline">{product.stock} stock left</strong></p><br>\
@@ -108,6 +110,7 @@ def product_quantity_mail(product):
 
 
 def new_registerApplication_mail(application):
+    return True
     link_url = 'https://svenskasvampar.se' + reverse('shopmanager:shopmanager-home')
     created_at_formatted = application.created_at.strftime('%Y-%m-%d %H:%M:%S')
     title = f'[INFO] New register application from {application.business_name}'
@@ -142,6 +145,7 @@ def new_registerApplication_mail(application):
 
 
 def insufficient_stock_mail(user_profile, email_insufficient_stock_items):
+    return True
     business_name = user_profile.business_name
     title = f'[Failed order] Failed order from {business_name} - insufficient stock'
     html_content = f'<p>{business_name}, tried to order the following items, but they are out of stock:</p><br>'
@@ -170,6 +174,7 @@ def insufficient_stock_mail(user_profile, email_insufficient_stock_items):
     
 
 def failed_add_to_cart_mail(product, quantity, user_profile):
+    return True
     business_name = user_profile.business_name
     title = f'[Failed add to cart] {business_name} tried to buy {product.name} - insufficient stock'
     html_content = f'<p>{business_name}, tried to add {product.name} x {quantity} to cart, but we only have {product.stock}</p>'

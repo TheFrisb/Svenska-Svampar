@@ -161,8 +161,8 @@
                         <td class="text-left">{{ item.product.name }}</td>
                         <td style="text-align:center;">{{ item.quantity }}</td>
                         <td class="text-left">kg</td>
-                        <td style="text-align:center;">{{ item.price_each }} sek</td>
-                        <td class="text-right">{{ item.total_price }} sek</td>
+                        <td style="text-align:center;">{{ item.price_each|floatformat:2 }} sek</td>
+                        <td class="text-right">{{ item.total_price|floatformat:2 }} sek</td>
                     {% endfor %}
                     </tr>
                 </tbody>
@@ -175,7 +175,6 @@
                         <tr>
                             <th class="text-left">Exkl. moms</th>
                             <th class="text-left">Moms</th>
-                            <th style="text-align:center;">Oresavr</th>
                             <th style="text-align:center;">Totalt</th>
                             <th class="text-right" style="font-weight:bold">ATT BETALA</th>
                         </tr>
@@ -184,7 +183,6 @@
                         <tr>
                             <td class="text-left">{{ order.subtotal_price|floatformat:2 }}</td>
                             <td class="text-left">{{ order.get_order_vat|floatformat:2 }}</td>
-                            <td style="text-align:center;">-0,20</td>
                             <td style="text-align:center;">{{ order.total_price|floatformat:2 }}</td>
                             <td class="text-right" style="font-size: 18px; font-weight: bolder;">SEK {{ order.total_price|floatformat:2 }}</td>
     
