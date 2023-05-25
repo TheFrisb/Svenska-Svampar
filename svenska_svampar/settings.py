@@ -124,7 +124,7 @@ LOGGING = {
         },
     },
 }
-
+asd
 logger = logging.getLogger(__name__)
 
 WSGI_APPLICATION = 'svenska_svampar.wsgi.application'
