@@ -76,16 +76,18 @@
                 <img src="https://svenskasvampar.se/static/shopmanager/assets/logo_pdf.png" alt="" width="200" height="200" >
             </div>
             <div class="col" style="width: 50%; display:inline-block">
-                <h2 style="font-size: 24px;">Orderbekräftelse</h2>
-                <div style="float: right; margin-top:20px;">
+                <h2 style="font-size: 24px;">Faktura</h2>
+                <div style="float: right;">
                     <div class="row-left">
-                        <p class="text-left">Orderdatum</p>
-                        <p class="text-left">Ordernr</p>
+                        <p class="text-left">Fakturadatum</p>
+                        <p class="text-left">Fakturanr</p>
+                        <p class="text-left">OCR</p>
                         <p class="text-left">Email:</p>
                     </div>
                     <div class="row-right gap-left">
                         <p>{{ order.created_at|date:"Y/m/d" }}</p>
                         <p>{{ order.invoice_number }}</p>
+                        <p>{{ order.invoice_ocr }}</p>
                         <p>info@svenskasvampar.se</p>
                     </div>
                 </div>
@@ -124,12 +126,18 @@
                     <div class="row-left">
                         <p class="text-left">Var Referens</p>
                         <p class="text-left">Betalningsvillkor </p>
+                        <p class="text-left">Forfallodatum</p>
                         <p class="text-left">Drojsmalsranta</p>
+                        <p class="text-left">Leveransdatum</p>
+                        <p class="text-left">Vart ordernr</p>
                     </div>
                     <div class="row-right gap-left">
                         <p>Vladimir Mitev</p>
                         <p>10 dagar</p>
+                        <p>{{ order.get_10_days_ahead|date:"Y/m/d" }}</p>
                         <p>8%</p>
+                        <p>TO BE FIXED SOON ???</p>
+                        <p>{{ order.id }}</p>
                     </div>
                 </div>
             </div>
