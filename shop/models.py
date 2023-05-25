@@ -54,7 +54,6 @@ class Product(models.Model):
     class Meta:
         verbose_name_plural = 'Products'
         verbose_name = 'Product'
-        order_with_respect_to = 'name'
 
     
     @property
