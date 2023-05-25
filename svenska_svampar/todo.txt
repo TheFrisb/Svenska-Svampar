@@ -10,7 +10,6 @@
 11. Staj celery za mails
 13. Fix all posible errors
 13. Write tests. 
-14. opraj faktura
 
 
 
