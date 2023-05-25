@@ -20,6 +20,8 @@ class ProductPriceInline(admin.TabularInline):
     model = ProductPrice
     formset = ProductPriceInlineFormSet
     extra = 0
+    # order by productprice.product.name
+    ordering = ('product__name',)
     
 
 class UserClassAdmin(admin.ModelAdmin):
