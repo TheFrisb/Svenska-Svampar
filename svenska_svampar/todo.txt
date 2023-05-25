@@ -1,16 +1,15 @@
-
-3. Pozadina stavi
-4. Fix cart total i subtotal design
+TO DO:
 
 
-7. Smeni font na svenska svampar
-8. Smeni boja
-9. Dodadi FAQ
-10. Opravi fly to cart
-11. Staj celery za mails
-13. Fix all posible errors
-13. Write tests. 
-
+1. Dodadi FAQ
+2. Fix cart total i subtotal design
+3. Smeni font na svenska svampar
+4. Smeni Pozadina
+5. Smeni boja
+6. Opravi fly to cart
+7. Fix all possible errors
+8. Staj celery za mails
+9. Write tests
 
 
 
@@ -19,3 +18,4 @@ Done
 2. Dodaj instagram link
 3. Products sortiri po nesto
 4. User class sortiri po buka i po vtora bukva
+5. Popraven delivery note

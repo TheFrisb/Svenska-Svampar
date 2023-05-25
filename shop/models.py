@@ -42,12 +42,32 @@ class Product(models.Model):
     name = models.CharField(max_length = 100, verbose_name='Name', db_index=True)
     stock = models.IntegerField(verbose_name='Stock')
     thumbnail = ProcessedImageField(upload_to='products/thumbnails/%Y/%m/%d/', processors=[ResizeToFill(550,550)], format='PNG', options={'quality': 100}, verbose_name='Thumbnail')
+    
     quantity_shipped = models.FloatField(default=1, verbose_name='1 box contains in kg')
+    description = models.TextField(blank=True, verbose_name='Description', null=True)
+    country_of_origin = models.CharField(max_length=100, blank=True, null=True, verbose_name='Country of Origin')
+    temperature_storage = models.CharField(max_length=100, blank=True, null=True, verbose_name='Temperature Storage')
+    storage_information = models.CharField(max_length=100, blank=True, null=True, verbose_name='Storage Information')
+
+    energy_kj = models.CharField(max_length=10, blank=True, null=True, verbose_name='Energy (kJ)')
+    energy_kcal = models.CharField(max_length=10,  blank=True, null=True, verbose_name='Energy (kcal)')
+    fat = models.CharField(max_length=10, blank=True, null=True, verbose_name='Fat')
+    saturated_fat = models.CharField(max_length=10, blank=True, null=True, verbose_name='Saturated Fat')
+    monosaturated_fat = models.CharField(max_length=10,  blank=True, null=True, verbose_name='Monosaturated Fat')
+    polyunsaturated_fat = models.CharField(max_length=10, blank=True, null=True, verbose_name='Polyunsaturated Fat')
+    carbohydrates = models.CharField(max_length=10, blank=True, null=True, verbose_name='Carbohydrates')
+    sugar = models.CharField(max_length=10, blank=True, null=True, verbose_name='Sugar')
+    starch = models.CharField(max_length=10, blank=True, null=True, verbose_name='Starch')
+    fiber = models.CharField(max_length=10, blank=True, null=True, verbose_name='Fiber')
+    protein = models.CharField(max_length=10, blank=True, null=True, verbose_name='Protein')
+    salt = models.CharField(max_length=10, blank=True, null=True, verbose_name='Salt')
+
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     mail_status = models.BooleanField(default=True)
     sku = models.CharField(max_length=100, blank=True, null=True, verbose_name='Article Number')
     ean_code = models.CharField(max_length=100, blank=True, null=True, verbose_name='EAN Code')
+    has_accordion = models.BooleanField(default=False, verbose_name='Has Accordion?')
     def __str__(self):
         return f'{self.name} - {self.stock} stock'
     
