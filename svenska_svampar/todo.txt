@@ -1,7 +1,5 @@
 TO DO:
 2. Smeni boja
-3. Opravi fly to cart
-4. Fix all possible errors
 5. Staj celery za mails
 6. Write tests
 
@@ -16,3 +14,4 @@ Done
 6. Dodaden FAQ
 7. Fix cart total i subtotal design
 8. Smeni Pozadina
+9. Opravi fly to cart
