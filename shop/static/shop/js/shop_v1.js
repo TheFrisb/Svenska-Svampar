@@ -13,8 +13,16 @@ $(window).on("load", function(){
 
 
 function flyProductThumbnailToCart(productCard, cartIcon, cartQuantityHolder){
+    $('body').addClass("isAnimating")
+    var initialOffset = $(productCard).offset();
+    function calculateAdjustedPosition() {
+        var scrollTop = $(window).scrollTop();
+        return {
+            top: initialOffset.top - scrollTop,
+            left: initialOffset.left
+        };
+    }
 
-    // fly thumbnailToFly to cartIcon
     $(productCard).clone().css({
         'opacity': '1',
         'position': 'absolute',
@@ -37,6 +45,14 @@ function flyProductThumbnailToCart(productCard, cartIcon, cartQuantityHolder){
             $(cartIcon).removeClass("cartIconTransform");
             $(cartQuantityHolder).removeClass("cartQuantityTransform");
         }, 300);
+    });
+
+    $(window).on('scroll', function() {
+        var adjustedPosition = calculateAdjustedPosition();
+        $(productCard).css({
+            top: adjustedPosition.top,
+            left: adjustedPosition.left
+        });
     });
 
         return;
