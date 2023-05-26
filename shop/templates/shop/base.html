@@ -8,16 +8,48 @@
     <title>Home</title>
     <link rel="stylesheet" href="{% static 'shopmanager/css/bootstrap.css' %}">
     <link rel="stylesheet" href="{% static 'shop/css/main.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700;900&display=swap" rel="stylesheet">
 </head>
-<body style="background-color:#f2f6fc!important">
+<body style="background-color:#f2f6fc!important" class="preload">
     <style>
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            /* display: none; <- Crashes Chrome on hover */
-            -webkit-appearance: none;
-            margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+        .body-background-container{
+            background-size: cover;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1000;
+            opacity: 0.7;
+        }
+        @media(max-width:992px){
+            .body-background-container{
+                background-image: url("{% static 'shop/assets/background/desktop.webp' %}"), url("{% static 'shop/assets/background/desktop.jpg' %}");
+            }
+            .border-mobile{
+            border-top: 1px solid rgb(248,249,250)!important;
+            }
         }
 
+        @media(min-width:992px){
+            .body-background-container{
+                background-image: url("{% static 'shop/assets/background/mobile.webp' %}"), url("{% static 'shop/assets/background/mobile.jpg' %}");
+            }
+        }
+
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
         input[type=number] {
             -moz-appearance:textfield; /* Firefox */
         }
@@ -27,9 +59,14 @@
         .grow { 
         transition: all .2s ease-in-out; 
         }
-
         .grow:hover { 
         transform: scale(1.02); 
+        }
+        .make-bold{
+            transition: all .2s ease-in-out;
+        }
+        .make-bold:hover{
+            font-weight: 600!important;
         }
         .product-card{
             transition: all .2s ease-in-out; 
@@ -50,10 +87,8 @@
             transition: all .2s ease-in-out; 
 
         }
-
         #cart:hover{
             transform: scale(1.1);
-            
         }
         #cartQuantity{
             position: absolute;
@@ -82,7 +117,9 @@
         .cartQuantityTransform{
             transform: scale(1.4)
         }
-
+        .productCard{
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px!important;
+        }
         @keyframes growAlert{
             0% { transform: rotate(0deg); }
             10%, 30%, 50%, 70%, 90% { transform: rotate(2deg); }
@@ -93,18 +130,22 @@
             animation: growAlert 2s;
             
         }
-        @media(max-width:992px){
-            .border-mobile{
-            border-top: 1px solid rgb(248,249,250)!important;
-            
 
-            }
+
+        .preload{
+            overflow: hidden;
         }
     </style>
+    <div id="pageLoader_SpinnerContainer" class=" bg-dark d-flex justify-content-center align-items-center w-100 h-100" style="position:fixed!important;top:0!important;left:0!important;z-index:10000000!important;">
+        <div class="spinner-border text-light" role="status" id="preload_spinner">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
     <div class="page-container">
         {% include "shop/includes/header.html" %}
-        {% block content %}{% endblock content %}
-        {% include "shop/includes/footer.html" %}
+        <div class="body-background-container"></div>
+            {% block content %}{% endblock content %}
+            {% include "shop/includes/footer.html" %}
     </div> 
     
     <script src="{% static 'shop/js/jquery.js' %}"></script>

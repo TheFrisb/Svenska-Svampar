@@ -1,8 +1,4 @@
 TO DO:
-
-
-
-2. Fix cart total i subtotal design
 3. Smeni font na svenska svampar
 4. Smeni Pozadina
 5. Smeni boja
@@ -20,3 +16,4 @@ Done
 4. User class sortiri po buka i po vtora bukva
 5. Popraven delivery note
 6. Dodaden FAQ
+7. Fix cart total i subtotal design
