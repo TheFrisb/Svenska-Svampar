@@ -9,7 +9,7 @@ $(window).on("load", function(){
 
 
 function disableAddToCart(parentCard){
-    $(parentCard).removeClass("border-2 border-success");
+    $(parentCard).addClass("border-2 border-success"); 
     $(parentCard).find(".quantityMinus").prop("disabled", true);
     $(parentCard).find(".quantityPlus").prop("disabled", true);
     $(parentCard).find(".product_quantity").prop("disabled", true);
@@ -18,7 +18,7 @@ function disableAddToCart(parentCard){
 }
 
 function enableAddToCart(parentCard){
-    $(parentCard).addClass("border-2 border-success");
+    $(parentCard).removeClass("border-2 border-success");
     $(parentCard).find(".quantityMinus").prop("disabled", false);
     $(parentCard).find(".quantityPlus").prop("disabled", false);
     $(parentCard).find(".product_quantity").prop("disabled", false).val(1);
