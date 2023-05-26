@@ -40,6 +40,18 @@
         }
 
         @media(min-width:992px){
+            .grow { 
+                transition: all .2s ease-in-out; 
+            }
+            .grow:hover { 
+                transform: scale(1.02); 
+            }
+            .make-bold{
+                transition: all .2s ease-in-out;
+            }
+            .make-bold:hover{
+                font-weight: 600!important;
+            }
             .body-background-container{
                 background-image: url("{% static 'shop/assets/background/mobile.webp' %}"), url("{% static 'shop/assets/background/mobile.jpg' %}");
             }
@@ -56,18 +68,7 @@
         .cursor-pointer{
             cursor: pointer;
         }
-        .grow { 
-        transition: all .2s ease-in-out; 
-        }
-        .grow:hover { 
-        transform: scale(1.02); 
-        }
-        .make-bold{
-            transition: all .2s ease-in-out;
-        }
-        .make-bold:hover{
-            font-weight: 600!important;
-        }
+
         .product-card{
             transition: all .2s ease-in-out; 
         }
