@@ -18,6 +18,13 @@
         body{
             font-family: 'Source Sans Pro', sans-serif;
         }
+        .addedToCartIcon{
+            width: 20px;
+            height: 20px;
+            background: url("{% static 'shop/assets/icons/bag-check-fill.svg' %}") no-repeat center center;
+            background-size: contain;
+            filter: invert(1);
+        }
         .body-background-container{
             background-size: cover;
             -webkit-background-size: cover;
@@ -39,6 +46,11 @@
             }
             .border-mobile{
             border-top: 1px solid rgb(248,249,250)!important;
+            }
+        }
+        @media(max-width:332px){
+            .navbar-brand{
+                margin-right: 0!important;
             }
         }
 
@@ -117,10 +129,10 @@
             
         }
         .cartIconTransform{
-            transform: scale(1.2);
+            transform: scale(1.3);
         }
         .cartQuantityTransform{
-            transform: scale(1.4)
+            transform: scale(1.6)
         }
         .productCard{
             box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px!important;
@@ -135,8 +147,6 @@
             animation: growAlert 2s;
             
         }
-
-
         .preload{
             overflow: hidden;
         }
