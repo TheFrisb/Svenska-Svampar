@@ -13,7 +13,6 @@ $(window).on("load", function(){
 
 
 function flyProductThumbnailToCart(productCard, cartIcon, cartQuantityHolder){
-    $('body').addClass("isAnimating")
     var initialOffset = $(productCard).offset();
     function calculateAdjustedPosition() {
         var scrollTop = $(window).scrollTop();
@@ -37,7 +36,7 @@ function flyProductThumbnailToCart(productCard, cartIcon, cartQuantityHolder){
         left: $(cartIcon).offset().left,
         width: 20,
         height: 20
-    }, 300, 'linear', function() {
+    }, 200, 'linear', function() {
         $(this).remove();
         $(cartIcon).addClass("cartIconTransform");
         $(cartQuantityHolder).addClass("cartQuantityTransform");
@@ -56,7 +55,7 @@ function flyProductThumbnailToCart(productCard, cartIcon, cartQuantityHolder){
     });
 
         return;
-    }
+}
 
 
 
