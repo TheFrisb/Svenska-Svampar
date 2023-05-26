@@ -1,7 +1,17 @@
-//  error: function(xhr, textStatus, errorThrown) {
-//                  Process the error response
-//                 $("#response").html(xhr.responseText);
-//               }
+$(window).on("load", function(){
+    $("#preload_spinner").remove();
+    $("#pageLoader_SpinnerContainer").fadeOut(1500, function(){
+        $(this).remove();
+    }
+    );
+    $("body").removeClass("preload");
+});
+
+
+
+
+
+
 function flyProductThumbnailToCart(productCard, cartIcon, cartQuantityHolder){
 
     // fly thumbnailToFly to cartIcon
@@ -92,6 +102,7 @@ function alert_remove_classes(alert){
     }
     return 
 }
+
 
 $(document).ready(function(){
     let csrf_token = $("input[name='csrfmiddlewaretoken']").val();
