@@ -151,7 +151,11 @@
                     <tr>
                         <td class="text-left">{{ item.product.sku }}</td>
                         <td class="text-left">{{ item.product.name }}</td>
-                        <td style="text-align:center;">{{ item.quantity }} lådor ({{ item.get_quantity_in_kg|floatformat:2 }}kg total)</td>
+                        {% if item.quantity == 1 %}
+                        <td style="text-align:center;">{{ item.quantity }} låda ({{ item.get_quantity_in_kg|floatformat:2 }}kg)</td>
+                        {% else %}
+                        <td style="text-align:center;">{{ item.quantity }} lådor ({{ item.get_quantity_in_kg|floatformat:2 }}kg)</td>
+                        {% endif %}
                         <td class="text-left">Låda</td>
                         <td style="text-align:center;">{{ item.price_each|floatformat:2 }} sek</td>
                         <td class="text-right">{{ item.total_price|floatformat:2 }} sek</td>

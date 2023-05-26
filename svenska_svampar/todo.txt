@@ -1,5 +1,4 @@
 TO DO:
-1. Smeni font na svenska svampar
 2. Smeni boja
 3. Opravi fly to cart
 4. Fix all possible errors
