@@ -12,7 +12,7 @@
     <div class="row g-4">
         
         {% for product, price in product_prices.items %}
-        <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-4">
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-4 p-xl-2">
             <div class="card text-center h-100 grow productCard " style="box-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.25);" data-product-id="{{ product.id }}">
                 <div>
                     <img src="{{ product.thumbnail.url }}" alt="" class="card-img-top card-productThumbnail p-2">
@@ -57,7 +57,7 @@
                               </button>
                             </h2>
                             <div id="product-card-accordion-nutrients-{{ product.id }}" class="accordion-collapse collapse" aria-labelledby="prdouctcard-accordion-nutrients-heading-{{ product.id }}">
-                              <div class="accordion-body text-start bg-light">
+                              <div class="accordion-body text-start bg-light p-0">
                                 <table class="table table-striped table-hover">
                                     <thead>
                                       <tr>
