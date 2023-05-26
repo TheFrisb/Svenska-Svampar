@@ -558,7 +558,7 @@ $(document).ready(function(){
                     let product = products[i];
                     let purchasedProductCard = $(`.productCard[data-product-id=${product.id}]`);
                     enableAddToCart(purchasedProductCard)
-                    new_order_html += "<strong>" + product.name + " - " + product.quantity + " x " + product.price + " sek= " + product.total_price + " sek</strong><br>";
+                    new_order_html += "<strong>" + product.name + " - " + product.quantity + " x " + product.price + " sek = " + product.total_price + " sek</strong><br>";
                 }
                 new_order_html += "<br><strong class='fs-5'>Total: " + data.order_total + " sek</strong>";
 
