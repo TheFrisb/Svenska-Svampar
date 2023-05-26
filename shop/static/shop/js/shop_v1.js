@@ -1,6 +1,6 @@
 $(window).on("load", function(){
     $("#preload_spinner").remove();
-    $("#pageLoader_SpinnerContainer").fadeOut(500, function(){
+    $("#pageLoader_SpinnerContainer").fadeOut(200, function(){
         $(this).remove();
     }
     );
