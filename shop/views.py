@@ -123,6 +123,7 @@ def create_order(request):
                     product.stock -= quantity
                     product.save()
                     product_dict = {
+                        'id': product.id,
                         'name': product.name,
                         'quantity': quantity,
                         'price': product_price,

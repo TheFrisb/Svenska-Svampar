@@ -556,6 +556,8 @@ $(document).ready(function(){
                 let new_order_html = "Your order has been placed successfully!<br><br>";
                 for(let i = 0; i < products.length; i++){
                     let product = products[i];
+                    let purchasedProductCard = $(`.productCard[data-product-id=${product.id}]`);
+                    enableAddToCart(purchasedProductCard)
                     new_order_html += "<strong>" + product.name + " - " + product.quantity + " x " + product.price + " = " + product.total_price + "</strong><br>";
                 }
                 new_order_html += "<br><strong class='fs-5'>Total: " + data.order_total + "$</strong>";
