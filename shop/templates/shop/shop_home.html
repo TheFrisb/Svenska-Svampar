@@ -74,20 +74,20 @@
                                         <td>Energy</td>
                                         <td class="text-end">{{ product.energy_kcal }}kcal</td>
                                       </tr>
-                                      <tr>
-                                        <td>Fats
+                                      <tr class="h-100">
+                                        <td style="vertical-align:middle!important">Fats
                                             <ul class="list-unstyled ps-2 pt-1">
-                                                <li>Saturated fatty acids</li>
-                                                <li>Monounsaturated fatty acids</li>
-                                                <li>Polyunsaturated fatty acids</li>
+                                                <li>Saturated</li>
+                                                <li>Monounsaturated</li>
+                                                <li>Polyunsaturated</li>
                                             </ul>
                                         </td>
                                         <td class="text-end">
                                             {{ product.fat }}g
                                             <ul class="list-unstyled pt-1">
-                                                <li>{{ product.fat }}g</li>
-                                                <li>{{ product.fat }}g</li>
-                                                <li>{{ product.fat }}g</li>
+                                                <li>{{ product.saturated_fat }}g</li>
+                                                <li>{{ product.monosaturated_fat }}g</li>
+                                                <li>{{ product.polyunsaturated_fat }}g</li>
                                             </ul>
                                         </td>
                                       </tr>
