@@ -15,7 +15,15 @@
         <div class="col-12 col-md-6 col-lg-4 col-xl-3 p-4 p-xl-2">
             <div class="card text-center h-100 grow productCard " style="box-shadow: 0 0.15rem 1.75rem 0 rgba(33, 40, 50, 0.25);" data-product-id="{{ product.id }}">
                 <div>
-                    <img src="{{ product.thumbnail.url }}" alt="" class="card-img-top card-productThumbnail p-2">
+                    <picture>
+                      <!-- WebP image -->
+                      <source srcset="{{ product.thumbnail.url }}" type="image/webp">
+                      <!-- PNG image fallback -->
+                      <source srcset="{{ product.thumbnail_as_png.url }}" type="image/png">
+                      <!-- Default fallback image -->
+                      <img src="{{ product.thumbnail_as_png.url }}" alt="Image of a mushroom" class="card-img-top card-productThumbnail p-2">
+                    </picture>
+               
                 </div>
                 
                 <div class="card-header fs-5 fw-bold text-dark card-productName">{{ product.name }}</div>
