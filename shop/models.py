@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
-from imagekit.models import ProcessedImageField
+from imagekit.models import ProcessedImageField, ImageSpecField
 from imagekit.processors import ResizeToFill
 from django.contrib.contenttypes.models import ContentType
 from datetime import timedelta
@@ -41,8 +41,8 @@ class UserProfile(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length = 100, verbose_name='Name', db_index=True)
     stock = models.IntegerField(verbose_name='Stock')
-    thumbnail = ProcessedImageField(upload_to='products/thumbnails/%Y/%m/%d/', processors=[ResizeToFill(550,550)], format='PNG', options={'quality': 100}, verbose_name='Thumbnail')
-    
+    thumbnail = ProcessedImageField(upload_to='products/thumbnails/%Y/%m/%d/', processors=[ResizeToFill(550,550)], format='WEBP', options={'quality': 95}, verbose_name='Thumbnail', null=True)
+    thumbnail_as_png = ImageSpecField(source='thumbnail',format='PNG')
     quantity_shipped = models.FloatField(default=1, verbose_name='1 box contains in kg')
     description = models.TextField(blank=True, verbose_name='Description', null=True)
     country_of_origin = models.CharField(max_length=100, blank=True, null=True, verbose_name='Country of Origin')
