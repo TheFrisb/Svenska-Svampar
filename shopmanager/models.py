@@ -1,5 +1,4 @@
 from django.db import models
-from shop.models import Order, OrderItem
 # Create your models here.
 
 

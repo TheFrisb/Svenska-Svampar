@@ -10,15 +10,24 @@ WKHTMLTOPDF_PATH= config('WKHTMLTOPDF_PATH')
 def export_orders_as_pdf(user_profile, order):
 
     order = Order.objects.prefetch_related('orderitem_set').filter(id=order.id).first()
+    if order.user is not None:
+        template = get_template('shopmanager/pdf_generation/delivery_note.html')
+        context = {'organization': user_profile, 'order': order}
+        html = template.render(context)
 
-    template = get_template('shopmanager/pdf_generation/delivery_note.html')
-    context = {'organization': user_profile, 'order': order}
-    html = template.render(context)
+        
+        output_filename = os.path.join(settings.MEDIA_ROOT, 'orders.pdf') # File path
 
-    
-    output_filename = os.path.join(settings.MEDIA_ROOT, 'orders.pdf') # File path
-
-    config = pdfkit.configuration(wkhtmltopdf=WKHTMLTOPDF_PATH)  # wkhtmltopdf path
-    pdfkit.from_string(html, output_filename, configuration=config)
-    print('PDF generated at: ' + output_filename)
-    return output_filename
+        config = pdfkit.configuration(wkhtmltopdf=WKHTMLTOPDF_PATH)  # wkhtmltopdf path
+        pdfkit.from_string(html, output_filename, configuration=config)
+        print('PDF generated at: ' + output_filename)
+        return output_filename
+    else:
+        template = get_template('shopmanager/pdf_generation/delivery_note_unregistered.html')
+        context = {'order': order}
+        html = template.render(context)
+        output_filename = os.path.join(settings.MEDIA_ROOT, 'orders.pdf') 
+        config = pdfkit.configuration(wkhtmltopdf=WKHTMLTOPDF_PATH) 
+        pdfkit.from_string(html, output_filename, configuration=config)
+        print('PDF generated at: ' + output_filename)
+        return output_filename
