@@ -1,0 +1,237 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Orders</title>
+    <meta charset="utf-8">
+</head>
+<body>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html{
+            height: 100%;
+        }
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 14px;
+        }
+        .container {
+            padding: 2%;
+        }
+        .text-right{
+            text-align: right;
+        }
+        .text-left{
+            text-align: left;
+        }
+        .padding-left-text{
+            padding-left: 10px;
+        }
+        p{
+            margin-bottom:3px;
+        }
+        .row{
+            width:100%;
+        }
+        .col{
+            width: 50%;
+        }
+        .row-left{
+            float: left;
+        }
+        .row-right{
+            float: right;
+        }
+        table{
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table>thead{
+            border-top: 1px solid black;
+        }
+       
+        table th, td{
+            font-size: 14px;
+            font-weight: normal;
+        }
+        .gap-left{
+            margin-left: 20px;
+        }
+        .main-table th, td{
+            padding: 10px 0px;
+        }
+        .secondary-table th, td{
+            padding: 5px 0px;
+        }
+
+    </style>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col" style="float: left; width:50%;">
+                <img src="https://svenskasvampar.se/static/shopmanager/assets/logo_pdf.png" alt="" width="200" height="200" >
+            </div>
+            <div class="col" style="width: 50%; display:inline-block">
+                <h2 style="font-size: 24px;">Orderbekräftelse</h2>
+                <div style="float: right; margin-top:20px;">
+                    <div class="row-left">
+                        <p class="text-left">Orderdatum</p>
+                        <p class="text-left">Ordernr</p>
+                        <p class="text-left">Email:</p>
+                    </div>
+                    <div class="row-right gap-left">
+                        <p>{{ order.created_at|date:"Y/m/d" }}</p>
+                        <p>{{ order.invoice_number }}</p>
+                        <p>info@svenskasvampar.se</p>
+                    </div>
+                </div>
+                <div style="width:100%; float:left">
+                    <p><strong>{{ order.business_name }}</strong></p>
+                    <p><strong>{{ order.address }}</strong></p>
+                    <p><strong>{{ order.postal_code }}</strong></p>
+                    <p><strong>{{ order.city }}</strong></p>
+                
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding: 30px 0px 15px 0px; float:left">
+            <div class="col">
+                <div style="float:left">
+                    <div class="row-left">
+                        <p class="text-left">Kundnr</p>
+                        <p class="text-left">Er referens </p>
+                        <p class="text-left">En VAT-nummer</p>
+                    </div>
+                    <div class="row-right gap-left">
+                        <p>{{ order.user_profile.id }}</p>
+                        <p>{{ order.contact_person }}</p>
+                        <p>{{ order.organization_number }}</p>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col" style="float:right">
+                <div style="float: left">
+                    <div class="row-left">
+                        <p class="text-left">Var Referens</p>
+                        <p class="text-left">Betalningsvillkor </p>
+                        <p class="text-left">Drojsmalsranta</p>
+                    </div>
+                    <div class="row-right gap-left">
+                        <p>Vladimir Mitev</p>
+                        <p>10 dagar</p>
+                        <p>8%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 1%">
+            <table class="main-table">
+                <thead style="border-bottom: 1px solid black;">
+                    <tr>
+                        <th class="text-left">Artnr</th>
+                        <th class="text-left">Benamning</th>
+                        <th style="text-align:center;">Lev ant</th>
+                        <th class="text-left">Enh</th>
+                        <th style="text-align:center;">Pris</th>
+                        <th class="text-right">Summa</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.orderitem_set.all %}
+                    <tr>
+                        <td class="text-left">{{ item.product.sku }}</td>
+                        <td class="text-left">{{ item.product.name }}</td>
+                        {% if item.quantity == 1 %}
+                        <td style="text-align:center;">{{ item.quantity }} låda ({{ item.get_quantity_in_kg|floatformat:2 }}kg)</td>
+                        {% else %}
+                        <td style="text-align:center;">{{ item.quantity }} lådor ({{ item.get_quantity_in_kg|floatformat:2 }}kg)</td>
+                        {% endif %}
+                        <td class="text-left">Låda</td>
+                        <td style="text-align:center;">{{ item.price_each|floatformat:2 }} sek</td>
+                        <td class="text-right">{{ item.total_price|floatformat:2 }} sek</td>
+                    {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row" style="padding:2%;position:absolute;bottom:2%!important;">
+            <div class="row">
+                <table class="secondary-table">
+                    <thead>
+                        <tr>
+                            <th class="text-left">Exkl. moms</th>
+                            <th class="text-left">Moms</th>
+                            <th style="text-align:center;">Totalt</th>
+                            <th class="text-right" style="font-weight:bold">ATT BETALA</th>
+                        </tr>
+                    </thead>
+                    <tbody style="border-bottom: 1px solid black;">
+                        <tr>
+                            <td class="text-left">{{ order.subtotal_price|floatformat:2 }}</td>
+                            <td class="text-left">{{ order.get_order_vat|floatformat:2 }}</td>
+                            <td style="text-align:center;">{{ order.total_price|floatformat:2 }}</td>
+                            <td class="text-right" style="font-size: 18px; font-weight: bolder;">SEK {{ order.total_price|floatformat:2 }}</td>
+    
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row" style="padding:10px 0px;">
+                <div class="col" style="float:left">
+                    <p>Moms 12% {{ order.get_order_vat|floatformat:2 }} ({{ order.subtotal_price|floatformat:2 }})</p>
+                </div>
+                <div class="col" style="float:right; text-align:right">
+                    <p>IBAN SE48 8000 0845 2569 3913 6930 BIC SWEDSESS</p>
+                    
+                </div>
+            </div>
+            <div class="row" style="padding-top: 30px">
+                <div class="col" style="float: left">
+                    <div style="width: 100%;">
+                        <div class="row-left" style="float:left">
+                            <p class="text-left">Adress</p>
+                            <p class="text-left">Mitson Bär & Svamp AB</p>
+                            <p class="text-left">Stinavägen 3</p>
+                            <p class="text-left">691 54 KARLSKOGA</p>
+                            <p class="text-left">Sverige</p>
+                        </div>
+                        <div class="row-right" style="float:right">
+                            <p>Telefon</p>
+                            <p>+46 73 666 71 67</p><br>
+                            <p>E post</p>
+                            <p>info@svenskasvampar.se</p><br>
+                            <p>Webbaddress</p>
+                            <p>www.svenskasvampar.se</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col" style="float: right">
+                    <div style="margin-left:25%;">
+                        <div class="row-left">
+                            <p class="text-left">Bankgiro</p>
+                            <p class="text-left">312-3718</p><br>
+                            <p class="text-left">Säte</p>
+                            <p class="text-left">Karlskoga</p>
+                        </div>
+                        <div class="row-right gap-left" style="padding-left:10px;">
+                            <p>Organisationsnr</p>
+                            <p>559057-4926</p><br>
+                            <p>Momsreg. nr</p>
+                            <p>SE559057492601</p><br>
+                            <p>Godkand for F-skatt</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</body>
+</html>

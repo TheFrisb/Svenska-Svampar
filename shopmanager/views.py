@@ -70,13 +70,19 @@ def shopmanager_view_orders(request, pk):
 def export_orders_as_pdf(request, pk):
     if request.user.is_authenticated and request.user.is_staff:
         order = Order.objects.prefetch_related('orderitem_set').filter(id=pk).first()
-        organization = order.user_profile
-        
-        context = {
-            'order': order,
-            'organization': organization,
-        }
-        return PDFTemplateResponse(request, 'shopmanager/pdf_generation/delivery_note.html', context, cmd_options={'load-error-handling': 'ignore'})
+        if order.user is not None:
+            organization = order.user_profile
+            
+            context = {
+                'order': order,
+                'organization': organization,
+            }
+            return PDFTemplateResponse(request, 'shopmanager/pdf_generation/delivery_note.html', context, cmd_options={'load-error-handling': 'ignore'})
+        else:
+            context = {
+                'order': order,
+            }
+            return PDFTemplateResponse(request, 'shopmanager/pdf_generation/delivery_note_unregistered.html', context, cmd_options={'load-error-handling': 'ignore'})
     else:
         return HttpResponse('You are not authorized to view this page')
 

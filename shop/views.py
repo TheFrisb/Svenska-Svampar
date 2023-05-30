@@ -135,11 +135,6 @@ def create_order(request):
                 order.subtotal_price = order_subtotal
                 order.total_price = order_total
                 order.save()
-
-                invoice_number = str(100 + order.id)
-                invoice_ocr = invoice_number + str(randint(10, 99))
-
-                Order.objects.filter(id=order.id).update(invoice_number=invoice_number, invoice_ocr=invoice_ocr)
                 send_mails.new_order_mail(order, generate_pdf.export_orders_as_pdf(user_profile  ,order))
                 return JsonResponse(
                     {

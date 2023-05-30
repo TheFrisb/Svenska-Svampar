@@ -118,7 +118,7 @@ class ProductPrice(models.Model):
 
 
 class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='User', null=True, blank=True)
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, verbose_name='User Profile')
     order_date = models.DateTimeField(auto_now_add=True, verbose_name='Order Date')
     subtotal_price = models.FloatField(null = True, verbose_name='Subtotal Price (excl. VAT)')
@@ -129,6 +129,16 @@ class Order(models.Model):
     invoice_number = models.CharField(max_length=100, blank=True, null=True, verbose_name='Invoice Number')
     invoice_ocr = models.CharField(max_length=100, blank=True, null=True, verbose_name='Invoice OCR')
 
+
+    business_name = models.CharField(max_length=100, blank=True, null=True, verbose_name='Business Name')
+    organization_number = models.CharField(max_length=100, blank=True, null=True, verbose_name='Organization Number')
+    sweden_organization_number = models.CharField(max_length=100, blank=True, null=True, verbose_name='Sweden Organization Number')
+    contact_person = models.CharField(max_length=100, blank=True, null=True, verbose_name='Contact Person')
+    address = models.CharField(max_length=100, blank=True, null=True, verbose_name='Address')
+    postal_code = models.CharField(max_length=100, blank=True, null=True, verbose_name='Postal Code')
+    city = models.CharField(max_length=100, blank=True, null=True, verbose_name='City')
+
+
     @property
     def get_order_vat(self):
         return self.total_price - self.subtotal_price
@@ -138,7 +148,11 @@ class Order(models.Model):
         return self.order_date + timedelta(days=10)
 
     def __str__(self):
-        return f'Order #{self.id} - {self.user.username}'
+        if self.user is None:
+            return f'Order #{self.id} - {self.business_name}'
+        else:
+            return f'Order #{self.id} - {self.user_profile.business_name}'
+        
 
     class Meta:
         verbose_name_plural = 'Orders'
