@@ -46,7 +46,7 @@ def new_order_mail(order, pdf_path):
     title = f'[NEW ORDER] New Order from {order.user_profile.business_name} - {order.created_at.strftime("%d/%m/%Y %H:%M:%S")}'
     html_content = f'<p style="font-weight:600">The invoice is as an attachment</p>'
     valid_html = format_email_html_content(title, html_content)
-
+    
     email = EmailMessage(
         subject=title,
         body=valid_html,

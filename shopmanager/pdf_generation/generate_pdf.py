@@ -16,7 +16,7 @@ def export_orders_as_pdf(user_profile, order):
         html = template.render(context)
 
         
-        output_filename = os.path.join(settings.MEDIA_ROOT, 'orders.pdf') # File path
+        output_filename = os.path.join(settings.PDF_ROOT, 'orders_' + str(order.id) + '.pdf') # File path
 
         config = pdfkit.configuration(wkhtmltopdf=WKHTMLTOPDF_PATH)  # wkhtmltopdf path
         pdfkit.from_string(html, output_filename, configuration=config)
